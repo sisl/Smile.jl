@@ -12,9 +12,9 @@ The library has only been tested on Ubuntu-Linux.
 
 Smile can be installed through the Julia package manager (version 0.3 required)
 
-'''julia
+```julia
 julia> Pkg.add("Smile")
-'''
+```
 
 In addition, Smile.jl requires the Smile C++ library and the compiled C wrapper.
 
@@ -33,16 +33,15 @@ Extract the downloaded files in the same directory as the wrapper code. Rename t
 	smile_compile.sh          Compilation bash script
 	lib/                      Smile Cpp compiled source
 
-Run the bash script: '''bash -x ./smile_compile.sh'''
+Run the bash script: ```bash -x ./smile_compile.sh```
 
 This will produce smile_wrapper.o and libsmilejl.so.1.0. All that is left to do is place it on your library search path and perform the linking.
 
-Move libsmilejl.so.1.0 to /usr/lib. '''>> sudo mv libsislsmile.so.1.0 /opt/lib'''
+Move the file and perform linking: 
 
-Perform the linking: 
-
-	cd /opt/lib
-	sudo ln -sf /opt/lib/libsmilejl.so.1.0 /opt/lib/libsmilejl.so.1
-	sudo ln -sf /opt/lib/libsmilejl.so.1.0 /opt/lib/libsmilejl.so
+	$ sudo mv libsislsmile.so.1.0 /opt/lib
+	$ cd /opt/lib
+	$ sudo ln -sf /opt/lib/libsmilejl.so.1.0 /opt/lib/libsmilejl.so.1
+	$ sudo ln -sf /opt/lib/libsmilejl.so.1.0 /opt/lib/libsmilejl.so
 
 Restart the terminal to ensure libsmilejl is found before using Smile.jl
