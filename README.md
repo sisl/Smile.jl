@@ -39,9 +39,8 @@ This will produce smile_wrapper.o and libsmilejl.so.1.0. All that is left to do 
 
 Move the file and perform linking: 
 
-	$ sudo mv libsislsmile.so.1.0 /opt/lib
-	$ cd /opt/lib
-	$ sudo ln -sf /opt/lib/libsmilejl.so.1.0 /opt/lib/libsmilejl.so.1
-	$ sudo ln -sf /opt/lib/libsmilejl.so.1.0 /opt/lib/libsmilejl.so
+	$ sudo mv libsmilejl.so.1.0 /usr/lib
+	$ sudo ln -sf /usr/lib/libsmilejl.so.1.0 /usr/lib/libsmilejl.so.1
+	$ sudo ln -sf /usr/lib/libsmilejl.so.1.0 /usr/lib/libsmilejl.so
 
 Restart the terminal to ensure libsmilejl is found before using Smile.jl
