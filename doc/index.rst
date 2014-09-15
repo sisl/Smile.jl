@@ -2,14 +2,12 @@
 Smile --- Structural Modelling, Inference, and Learning Engine
 ==============================================================
 
-'Smile <https://github.com/tawheeler/Smile.jl>'_ is a package wrapper around the C++ Smile library. It allows users to do structure modelling, inference, and learning for Bayesian Networks. 
+The *Smile* package is a wrapper for the C++ SMILE librarydeveloped by the Decision Systems Laboratory at the University of Pittsburgh. Smile allows users to do structure modelling, inference, and learning for Bayesian Networks. 
 
-Contents
---------
+**Contents:**
 
 .. toctree::
    :maxdepth: 2
-
 
 
 Indices and tables
