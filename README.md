@@ -8,12 +8,19 @@ A Julia wrapper for the **[Smile C++ Structural Modeling, Inference, and Learnin
 
 The library has only been tested on Ubuntu-Linux.
 
+## Documentation
+
+Library documentation is available **[here]**.
+
+[here]: http://smile.readthedocs.org/
+
+
 ## Installation
 
 Smile can be installed through the Julia package manager (version 0.3 required)
 
 ```julia
-julia> Pkg.add("Smile")
+julia> Pkg.clone("Smile")
 ```
 
 In addition, Smile.jl requires the Smile C++ library and the compiled C wrapper.
