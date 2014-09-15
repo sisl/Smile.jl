@@ -9,6 +9,9 @@ The *Smile* package is a wrapper for the C++ SMILE librarydeveloped by the Decis
 .. toctree::
    :maxdepth: 2
 
+   types.rst
+   installation.rst
+
 
 Indices and tables
 ==================

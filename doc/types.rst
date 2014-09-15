@@ -29,18 +29,3 @@ The available types are:
 
 All objects are constructed without parameters, with the exception of SysCoordinates, which requires a NodeDefinition.
 
-Contents
---------
-
-.. toctree::
-   :maxdepth: 2
-
-   types.rst
-
-.. Indices and tables
-.. ==================
-
-.. * :ref:`genindex`
-.. * :ref:`modindex`
-.. * :ref:`search`
-
