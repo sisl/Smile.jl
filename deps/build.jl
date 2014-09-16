@@ -8,3 +8,5 @@ libdep = library_dependency("libsmilejl")
 provides(Binaries, URI(url), libdep)
 
 @BinDeps.install
+
+# https://github.com/tawheeler/METADATA.jl/compare/pull-request/1501c825

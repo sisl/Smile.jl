@@ -19,3 +19,4 @@ The *Smile.jl* package is a wrapper for the C++ SMILE librarydeveloped by the De
 .. * :ref:`genindex`
 .. * :ref:`modindex`
 .. * :ref:`search`
+
