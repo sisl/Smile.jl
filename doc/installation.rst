@@ -8,7 +8,7 @@ The wrapper library for Smile comes pre-built and is installed automatically whe
 	Pkg.add("Smile")
 
 Advanced
-========
+--------
 
 SMILE is a C++ project for which headers and static libraries are freely distributed. It is recommended that users download a copy of the latest version of SMILE_ for their operating system.
 
