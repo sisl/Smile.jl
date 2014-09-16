@@ -31,7 +31,7 @@ Run the bash script:
 
 .. code-block:: bash
 
-	bash -x ./smile_compile.sh
+	$ bash -x ./smile_compile.sh
 
 This will produce smile_wrapper.o and libsmilejl.so.1.0. All that is left to do is place it on your library search path and perform the linking.
 
