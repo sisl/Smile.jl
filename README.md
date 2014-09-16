@@ -6,8 +6,6 @@ A Julia wrapper for the **[Smile C++ Structural Modeling, Inference, and Learnin
 
 [Smile C++ Structural Modeling, Inference, and Learning Engine]: https://dslpitt.org/genie/
 
-The library has only been tested on Ubuntu-Linux.
-
 ## Documentation
 
 Library documentation is available **[here]**.
@@ -23,9 +21,9 @@ Smile can be installed through the Julia package manager (version 0.3 required)
 julia> Pkg.clone("Smile")
 ```
 
-Instructions are available **[here]** for those who wish to compile the C++ wrapper themselves.
+Instructions are available **[as well]** for those who wish to compile the C++ wrapper themselves.
 
-[here]: http://smile.readthedocs.org/installation
+[as well]: http://smile.readthedocs.org/en/latest/installation.html
 
 ## Credit
 
