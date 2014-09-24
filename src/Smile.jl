@@ -16,7 +16,8 @@ module Smile
 try
 	ccall( (:libexists, "libsmilejl"), Bool, () )
 catch
-	error("Could not communicate with libsmilejl. Make sure it exists and that it is on the path.")
+	warn("Could not communicate with libsmilejl. Make sure it exists and that it is on the path.")
+	return
 end
 
 
