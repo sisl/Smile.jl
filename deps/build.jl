@@ -1,12 +1,11 @@
-using BinDeps
-@BinDeps.setup
+# using BinDeps
+# @BinDeps.setup
 
-version = "0.1.0"
-url = "http://dl.bintray.com/tawheeler/generic/libsmilejl.so/libsmilejl.so"
 
-libdep = library_dependency("libsmilejl")
-provides(Binaries, URI(url), libdep)
+# libsmilejl = library_dependency("libsmilejl.so", os=:Unix)
 
-@BinDeps.install
+# provides(Binaries, 
+# 	URI("http://dl.bintray.com/tawheeler/generic/libsmilejl.so/libsmilejl.so"), 
+# 	libsmilejl, os = :Unix)
 
-# https://github.com/tawheeler/METADATA.jl/compare/pull-request/1501c825
+# @BinDeps.install [:libsmilejl => :libsmilejl]
