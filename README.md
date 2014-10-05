@@ -18,7 +18,7 @@ Library documentation is available **[here]**.
 Smile can be installed through the Julia package manager (version 0.3 required)
 
 ```julia
-julia> Pkg.clone("Smile")
+julia> Pkg.add("Smile")
 ```
 
 Instructions are available **[as well]** for those who wish to compile the C++ wrapper themselves.
