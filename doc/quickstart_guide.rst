@@ -3,7 +3,7 @@ QuickStart Guide
 
 This tutorial will cover some basic steps in creating a Bayesian network. It closely mimics the first smile tutorial_.
 
--- _tutorial: https://dslpitt.org/genie/wiki/SMILE_Tutorial_1:_Creating_a_Bayesian_Network
+.. _tutorial: https://dslpitt.org/genie/wiki/SMILE_Tutorial_1:_Creating_a_Bayesian_Network
 
 We start by declaring an instance of a network.
 
