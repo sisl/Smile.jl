@@ -11,6 +11,7 @@ The *Smile.jl* package is a wrapper for the C++ SMILE librarydeveloped by the De
 
    types.rst
    installation.rst
+   quickstart_guide.rst
 
 
 .. Indices and tables
