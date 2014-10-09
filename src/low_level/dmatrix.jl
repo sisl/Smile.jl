@@ -5,7 +5,7 @@ export
 		get_size_of_dimension
 
 function get_at{T <: Integer}( dmat::DMatrix, coord::Array{T,1} )
-	retval = ccall( (:dmatrix_GetAtCoord, "libsmilejl"), Float64, (Ptr{Void},Ptr{Int32},Uint32), dmat.ptr, int32(coord), length(coord) )
+	retval = ccall( (:dmatrix_GetAtCoord, LIB_SMILE), Float64, (Ptr{Void},Ptr{Int32},Uint32), dmat.ptr, int32(coord), length(coord) )
 	return retval
 end
 
@@ -26,23 +26,23 @@ function get_at( dmat::DMatrix, ind::Integer )
 	#                  4,       ->       [A1 B3 C1]
 	#     ...
 	#                  11       ->       [A2 B3 C2]
-	retval = ccall( (:dmatrix_GetAtInd, "libsmilejl"), Float64, (Ptr{Void},Int32), dmat.ptr, ind )
+	retval = ccall( (:dmatrix_GetAtInd, LIB_SMILE), Float64, (Ptr{Void},Int32), dmat.ptr, ind )
 	return retval
 end
 
 function get_number_of_dimensions( dmat::DMatrix )
-	retval = ccall( (:dmatrix_GetNumberOfDimensions, "libsmilejl"), Int32, (Ptr{Void},), dmat.ptr )
+	retval = ccall( (:dmatrix_GetNumberOfDimensions, LIB_SMILE), Int32, (Ptr{Void},), dmat.ptr )
 	return retval
 end
 
 function get_size( dmat::DMatrix )
-	retval = ccall( (:dmatrix_GetSize, "libsmilejl"), Int32, (Ptr{Void},), dmat.ptr )
+	retval = ccall( (:dmatrix_GetSize, LIB_SMILE), Int32, (Ptr{Void},), dmat.ptr )
 	return retval
 end
 
 function get_size_of_dimension( dmat::DMatrix, aDimension::Integer )
 	# indexing starts at 0
 	# returns 0 if you pick a bad value for aDimension
-	retval = ccall( (:dmatrix_GetSizeOfDimension, "libsmilejl"), Int32, (Ptr{Void},Int32), dmat.ptr, aDimension )
+	retval = ccall( (:dmatrix_GetSizeOfDimension, LIB_SMILE), Int32, (Ptr{Void},Int32), dmat.ptr, aDimension )
 	return retval
 end

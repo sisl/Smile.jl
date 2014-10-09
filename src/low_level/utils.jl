@@ -14,7 +14,7 @@ function discretize{T<:Real}( data::Array{T,1}, nBins::Integer  )
 	binedges = Array(Float64, nBins+1)
 	discretized = Array(Int32, length(data))
 
-	ccall( (:discretize, "libsmilejl"), Void, 
+	ccall( (:discretize, LIB_SMILE), Void, 
 	 	(Ptr{Float32}, Uint32, Int32, Ptr{Float64}, Ptr{Int32}), 
 	 	float32(data), length(data), nBins, binedges, discretized )
 	
@@ -22,7 +22,7 @@ function discretize{T<:Real}( data::Array{T,1}, nBins::Integer  )
 end
 
 function get_nodetype_id( typeName::String )
-	retval = ccall( (:getNodeTypeID, "libsmilejl"), Int32, (Ptr{Uint8},), bytestring(typeName) )
+	retval = ccall( (:getNodeTypeID, LIB_SMILE), Int32, (Ptr{Uint8},), bytestring(typeName) )
 	if retval == -1
 		error( "getNodeTypeID: node type not recognized: ", typeName )
 	end

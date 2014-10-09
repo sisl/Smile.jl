@@ -13,9 +13,14 @@ module Smile
 ##
 ##############################################################################
 
-if isempty(find_library(["libsmilejl"]))
+curpath = dirname(@__FILE__() )
+pathtoadd = curpath[1:end-3]*"deps/downloads/"
+
+if isempty(find_library(["libsmilejl"], [pathtoadd]))
 	warn("Could not communicate with libsmilejl. Make sure it exists and that it is on the path.")
 else
+
+	global const LIB_SMILE = find_library(["libsmilejl"], [pathtoadd])
 
 	include("low_level/types.jl")
 	include("low_level/network.jl")

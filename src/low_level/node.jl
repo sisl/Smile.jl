@@ -12,39 +12,39 @@ function change_type( node::Node, newNodeType::Integer )
 		error( "network_AddNode: newNodeType not a recognized type" )
 	end
 
-	err_int = ccall( (:node_ChangeType, "libsmilejl"), Int32, (Ptr{Void},Int32), node.ptr, newNodeType )
+	err_int = ccall( (:node_ChangeType, LIB_SMILE), Int32, (Ptr{Void},Int32), node.ptr, newNodeType )
 	if err_int < 0
 		error( "node_ChangeType: ", err_int )
 	end
 end
 
 function definition( node::Node )
-	ptr = ccall( (:node_Definition, "libsmilejl"), Ptr{Void}, (Ptr{Void},), node.ptr )
+	ptr = ccall( (:node_Definition, LIB_SMILE), Ptr{Void}, (Ptr{Void},), node.ptr )
 	return NodeDefinition(ptr)
 end
 
 function get_name( node::Node )
 	retval = Array(Uint8, 128)
-	ccall( (:node_GetName, "libsmilejl"), Void, (Ptr{Void}, Ptr{Uint8}), node.ptr, retval )
+	ccall( (:node_GetName, LIB_SMILE), Void, (Ptr{Void}, Ptr{Uint8}), node.ptr, retval )
 	bytestring(convert(Ptr{Uint8}, retval))
 end
 
 function handle( node::Node )
-	retval = ccall( (:node_Handle, "libsmilejl"), Int32, (Ptr{Void},), node.ptr )
+	retval = ccall( (:node_Handle, LIB_SMILE), Int32, (Ptr{Void},), node.ptr )
 	return retval
 end
 
 function network( node::Node )
-	ptr = ccall( (:node_Network, "libsmilejl"), Ptr{Void}, (Ptr{Void},), node.ptr )
+	ptr = ccall( (:node_Network, LIB_SMILE), Ptr{Void}, (Ptr{Void},), node.ptr )
 	return Network(ptr)
 end
 
 function set_name( node::Node, name::String )
 	
-	ccall( (:node_SetName, "libsmilejl"), Void, (Ptr{Void}, Ptr{Uint8}), node.ptr, bytestring(name) )
+	ccall( (:node_SetName, LIB_SMILE), Void, (Ptr{Void}, Ptr{Uint8}), node.ptr, bytestring(name) )
 end
 
 function value( node::Node )
-	ptr = ccall( (:node_Value, "libsmilejl"), Ptr{Void}, (Ptr{Void},), node.ptr )
+	ptr = ccall( (:node_Value, LIB_SMILE), Ptr{Void}, (Ptr{Void},), node.ptr )
 	return NodeValue(ptr)
 end
