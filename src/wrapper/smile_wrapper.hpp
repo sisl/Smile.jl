@@ -1,4 +1,4 @@
-// SISL SMILE
+// SMILE.JL
 // A C library wrapper for SMILE (Structural Modeling, Inference, and Learning Engine)
 // so that users may call SMILE functions through Julia
 //
