@@ -10,7 +10,7 @@ export
 		is_missing,
 		read_file,
 		remove_var,
-		learn_bayesian_search,
+		learn_bayesian_search!,
 		learn_dynamic_bayesian_network,
 		learn_greedy_thick_thinning,
 		set_variable_info,
@@ -72,11 +72,11 @@ function is_missing( dset::Dataset, var::Integer, rec::Integer )
 	return retval
 end
 
-function learn_bayesian_search( dset::Dataset, net::Network;
-	                 maxparents=5, maxsearchtime=0, niterations=20,
-	                 linkprobability=0.1, priorlinkprobability=0.001,
-	                 priorsamplesize=50, seed=0, forced_arcs=Array(Tuple,0),
-	                 forbidden_arcs=Array(Tuple,0), tiers=Array(Tuple,0) )
+function learn_bayesian_search!( dset::Dataset, net::Network;
+    maxparents=5, maxsearchtime=0, niterations=20,
+    linkprobability=0.1, priorlinkprobability=0.001,
+    priorsamplesize=50, seed=0, forced_arcs=Array(Tuple,0),
+    forbidden_arcs=Array(Tuple,0), tiers=Array(Tuple,0) )
 
 	# maxparents: limits the maximum number of parents a node can have
 	# maxsearchtime: the maximum runtime of the algorithm (0 = infinite)
