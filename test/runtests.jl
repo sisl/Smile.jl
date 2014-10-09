@@ -2,4 +2,4 @@ using Smile
 using Base.Test
 
 # write your own tests here
-@test 1 == 1
+include("tut1_create_a_bayesian_network.jl")

@@ -114,7 +114,9 @@ function read_file( net::Network, fileName::String )
 end
 
 function write_file( net::Network, fileName::String )
-	# TODO: check that fileName ends with a valid file type
+	ext = splitext(fileName)[2]
+	@assert(ext == ".dsl" || ext == ".xdsl")
+
 	retval = ccall( (:network_WriteFile, "libsmilejl"), Int32, (Ptr{Void},Ptr{Uint8}), net.ptr, bytestring(fileName) )
 	return retval
 end

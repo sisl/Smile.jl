@@ -35,6 +35,7 @@ function is_nodetype_id( typeID::Integer )
 	       typeID == DSL_MAU  || typeID == DSL_TABLE
 end
 
+# notetype ids
 const DSL_CPT        = get_nodetype_id("DSL_CPT")
 const DSL_TRUTHTABLE = get_nodetype_id("DSL_TRUTHTABLE")
 const DSL_LIST       = get_nodetype_id("DSL_LIST")
