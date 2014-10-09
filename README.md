@@ -6,6 +6,8 @@ A Julia wrapper for the **[Smile C++ Structural Modeling, Inference, and Learnin
 
 [Smile C++ Structural Modeling, Inference, and Learning Engine]: https://dslpitt.org/genie/
 
+[![Smile](http://pkg.julialang.org/badges/Smile_release.svg)](http://pkg.julialang.org/?pkg=Smile&ver=release)
+
 ## Documentation
 
 Library documentation is available **[here]**.
