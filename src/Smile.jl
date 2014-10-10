@@ -35,7 +35,6 @@ else
 	include("low_level/dmatrix.jl")
 
 	include("high_level/learning.jl")
-
 end
 
 end # end module

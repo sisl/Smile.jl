@@ -7,7 +7,7 @@ net = Network()
 # add a success node
 success = add_node(net, DSL_CPT, "Success")
 somenames = IdArray()
-add(somenames, "Sucess")
+add(somenames, "Success")
 add(somenames, "Failure")
 set_number_of_outcomes(definition(get_node(net, success)), somenames)
 
