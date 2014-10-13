@@ -61,7 +61,7 @@ function learn_bayesian_search!( mat::Matrix{Int}, net::Network, params::Network
 	return learn_bayesian_search!( dset, net, params )
 end
 
-function matrix_to_dataset( mat::Matrix{Int}, names=alphanumeric_names(size(mat,2)) )
+function matrix_to_dataset{R <: Real, S<:String}( mat::Matrix{R}, names::Vector{S}=alphanumeric_names(size(mat,2)) )
 	# converts a Matrix{Int} to a Dataset by writing it to a tempfile and loading it back in
 	ftempname = tempname()
 	writetable(ftempname, mat, names)
@@ -73,7 +73,7 @@ function matrix_to_dataset( mat::Matrix{Int}, names=alphanumeric_names(size(mat,
 	dset
 end
 
-function writetable{S<:String}(filename::String, mat::Matrix{Int}, names::Vector{S}; separator::Char='\t')
+function writetable{R <: Real, S<:String}(filename::String, mat::Matrix{R}, names::Vector{S}; separator::Char='\t')
 	n,m = size(mat)
 	f = open(filename, "w")
 	
@@ -82,11 +82,20 @@ function writetable{S<:String}(filename::String, mat::Matrix{Int}, names::Vector
 	end
 	@printf(f, "%s\n", names[end])
 
-	for i = 1 : n
-		for j = 1 : m-1
-			@printf(f, "%d%c", mat[i,j], separator)
+	if isa(R, Integer)
+		for i = 1 : n
+			for j = 1 : m-1
+				@printf(f, "%d%c", mat[i,j], separator)
+			end
+			@printf(f, "%d\n", mat[i,m])
 		end
-		@printf(f, "%d\n", mat[i,m])
+	else
+		for i = 1 : n
+			for j = 1 : m-1
+				@printf(f, "%f%c", mat[i,j], separator)
+			end
+			@printf(f, "%f\n", mat[i,m])
+		end
 	end
 
 	close(f)

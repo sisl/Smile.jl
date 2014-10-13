@@ -10,24 +10,45 @@
 //             DSL_DATASET           //
 ///////////////////////////////////////
 
-void * createDataset()
-{
+int EDSL_DISCRETIZE_HIERARCHICAL = DSL_dataset::Hierarchical;
+int EDSL_DISCRETIZE_UNIFORMWIDTH = DSL_dataset::UniformWidth;
+int EDSL_DISCRETIZE_UNIFORMCOUNT = DSL_dataset::UniformCount;
+
+void * createDataset() {
 	DSL_dataset * dset = new DSL_dataset();
 	void * retval = dset;
 	return retval;
 }
-
-void freeDataset( void * void_dataset )
-{
+void * copyDataset( void * void_dataset ) {
+	DSL_dataset * dset = reinterpret_cast<DSL_dataset*>(void_dataset);
+	DSL_dataset * dset2 = new DSL_dataset(*dset);
+	void * retval = dset2;
+	return retval;
+}
+void freeDataset( void * void_dataset ) {
 	DSL_dataset * dset = reinterpret_cast<DSL_dataset*>(void_dataset);
 	delete dset;
 }
+
+int dataset_readFile( void * void_dataset, char * filename )
+{
+	DSL_dataset * dset = reinterpret_cast<DSL_dataset*>(void_dataset);
+	return dset->ReadFile(filename);
+}
+
 
 void dataset_discretize( void * void_dataset, int var, int nBins, char *statePrefix)
 {
 	DSL_dataset * dset = reinterpret_cast<DSL_dataset*>(void_dataset);
 	dset->Discretize(var, DSL_dataset::Hierarchical, nBins, statePrefix);
 }
+void dataset_discretize_withedges( void * void_dataset, int var, int nBins, char *statePrefix, double* edges)
+{
+	DSL_dataset * dset = reinterpret_cast<DSL_dataset*>(void_dataset);
+	std::vector<double> v_edges (edges, edges + nBins);
+	dset->Discretize(var, DSL_dataset::Hierarchical, nBins, statePrefix, v_edges);
+}
+
 
 unsigned dataset_discretize_getedges( void * void_dataset, int var, int nBins, char *statePrefix, double *binEdges)
 {
@@ -237,11 +258,7 @@ bool dataset_learnGreedyThickThinning( void * void_dataset, void * void_net )
 	return gtt.Learn(*dset, *net) == DSL_OKAY;
 }
 
-int dataset_readFile( void * void_dataset, char * filename )
-{
-	DSL_dataset * dset = reinterpret_cast<DSL_dataset*>(void_dataset);
-	return dset->ReadFile(filename);
-}
+
 
 void dataset_removeVar( void * void_dataset, int var )
 {

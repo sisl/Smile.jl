@@ -1,20 +1,24 @@
-export
-		Dataset,
-		DatasetVarInfo,
-		DoubleArray,
-		Header,
-		IdArray,
-		Network,
-		Node,
-		NodeDefinition,
-		NodeValue,
-		SysCoordinates		
+export  Dataset, DatasetVarInfo, DatasetParseParams
+export  DoubleArray
+export  Header
+export  IdArray
+export  Network
+export  Node
+export  NodeDefinition
+export  NodeValue
+export  SysCoordinates		
 		
 type Dataset
 	ptr::Ptr{Void}
 	
 	function Dataset()
 		ptr = ccall( (:createDataset, LIB_SMILE), Ptr{Void}, ())
+		smart_p = new(ptr)
+		finalizer(smart_p, obj -> ccall( (:freeDataset, LIB_SMILE), Void, (Ptr{Void},), obj.ptr ))
+		smart_p
+	end
+	function Dataset( dset::Dataset )
+		ptr = ccall( (:copyDataset, LIB_SMILE), Ptr{Void}, (Ptr{Void},), dset.ptr)
 		smart_p = new(ptr)
 		finalizer(smart_p, obj -> ccall( (:freeDataset, LIB_SMILE), Void, (Ptr{Void},), obj.ptr ))
 		smart_p
@@ -30,7 +34,17 @@ type DatasetVarInfo
 		finalizer(smart_p, obj -> ccall( (:freeDatasetVarInfo, LIB_SMILE), Void, (Ptr{Void},), obj.ptr ))
 		smart_p
 	end
-end		
+end
+type DatasetParseParams
+	ptr::Ptr{Void}
+
+	function DatasetParseParams()
+		ptr = ccall( (:createDatasetParseParams, LIB_SMILE), Ptr{Void}, ())
+		smart_p = new(ptr)
+		finalizer(smart_p, obj -> ccall( (:freeDatasetParseParams, LIB_SMILE), Void, (Ptr{Void},), obj.ptr ))
+		smart_p
+	end
+end
 
 type DMatrix
 

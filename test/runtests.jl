@@ -17,5 +17,7 @@ function test_vec_approx_equal{T<:Real}(a::Vector{T}, b::Vector{T}, tol::Float64
 end
 
 # write your own tests here
-include("tut1_create_a_bayesian_network.jl")
-include("high_level_learning.jl")
+include("test_dataset.jl")
+# include("tut1_create_a_bayesian_network.jl")
+# include("high_level_learning.jl")
+

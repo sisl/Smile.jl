@@ -24,15 +24,31 @@ export
 		get_missing_int,
 		get_missing_float,
 		get_state_names
+export DSL_DISCRETIZE_HIERARCHICAL, DSL_DISCRETIZE_UNIFORMWIDTH, DSL_DISCRETIZE_UNIFORMCOUNT
+
+# --------------
+
+const DSL_DISCRETIZE_HIERARCHICAL = unsafe_load(cglobal((:EDSL_DISCRETIZE_HIERARCHICAL, LIB_SMILE), Int32))
+const DSL_DISCRETIZE_UNIFORMWIDTH = unsafe_load(cglobal((:EDSL_DISCRETIZE_UNIFORMWIDTH, LIB_SMILE), Int32))
+const DSL_DISCRETIZE_UNIFORMCOUNT = unsafe_load(cglobal((:EDSL_DISCRETIZE_UNIFORMCOUNT, LIB_SMILE), Int32))
+
+# --------------
 
 function add_float_var( dset::Dataset, varName::String )
 	
 	ccall( (:dataset_addFloatVar, LIB_SMILE), Void, (Ptr{Void},Ptr{Uint8}), dset.ptr, bytestring(varName) )
 end
 
-function discretize( dset::Dataset, var::Integer, nBins::Integer, statePrefix::String )
-	
-	ccall( (:dataset_discretize, LIB_SMILE), Void, (Ptr{Void},Int32,Int32,Ptr{Uint8}), dset.ptr, var, nBins, bytestring(statePrefix) )
+function discretize{T<:Real}( dset::Dataset, var::Integer, nBins::Integer, statePrefix::String, edges::Vector{T}=Float64[] )
+	@assert( nBins > 1 )
+	if isempty(edges)
+		ccall( (:dataset_discretize, LIB_SMILE), Void, (Ptr{Void},Int32,Int32,Ptr{Uint8}), dset.ptr, var, nBins, bytestring(statePrefix) )
+	else
+		@assert(length(edges) == nBins + 1)
+		ccall( (:dataset_discretize_withedges, LIB_SMILE), Void, 
+			(Ptr{Void},Int32,Int32,Ptr{Uint8},Ptr{Float64}), 
+			dset.ptr, var, nBins, bytestring(statePrefix), edges )
+	end
 end
 
 function discretize_with_info( dset::Dataset, var::Integer, nBins::Integer, statePrefix::String )
@@ -43,11 +59,13 @@ function discretize_with_info( dset::Dataset, var::Integer, nBins::Integer, stat
 end
 
 function get_float( dset::Dataset, var::Integer, rec::Integer )
+	@assert( !is_discrete(dset, var) )
 	retval = ccall( (:dataset_getFloat, LIB_SMILE), Float32, (Ptr{Void},Int32,Int32), dset.ptr, var, rec )
 	return retval
 end
 
 function get_int( dset::Dataset, var::Integer, rec::Integer )
+	@assert( is_discrete(dset, var) )
 	retval = ccall( (:dataset_getInt, LIB_SMILE), Int32, (Ptr{Void},Int32,Int32), dset.ptr, var, rec )
 	return retval
 end
@@ -207,7 +225,7 @@ end
 
 
 # DatasetVarInfo - a struct within DSL_dataset
-##########################3
+##############################################
 
 function get_discrete( dsetvi::DatasetVarInfo )
 	retval = ccall( (:datasetvarinfo_getDiscrete, LIB_SMILE), Bool, (Ptr{Void},), dsetvi.ptr )
@@ -247,4 +265,35 @@ function get_state_names( dsetvi::DatasetVarInfo )
 	end
 
 	return names
+end
+
+# DatasetParseParams - a struct within DSL_dataset
+##################################################
+function getindex( pp::DatasetParseParams, entry::Symbol )
+	if entry == :missingValueToken
+		str_buf = Array(Uint8, 128)
+		ccall( (:datasetparseparams_getMissingValueToken, LIB_SMILE), Void, (Ptr{Void},Ptr{Uint8}), pp.ptr, str_buf )
+		return bytestring(convert(Ptr{Uint8}, str_buf))
+	elseif entry == :missingInt
+		return ccall( (:datasetparseparams_getMissingInt, LIB_SMILE), Int32, (Ptr{Void},), pp.ptr )
+	elseif entry == :missingFloat
+		return ccall( (:datasetparseparams_getMissingFloat, LIB_SMILE), Float32, (Ptr{Void},), pp.ptr )
+	elseif entry == :columnIdsPresent
+		return ccall( (:datasetparseparams_getColumnIdsPresent, LIB_SMILE), Bool, (Ptr{Void},), pp.ptr )
+	end	
+	error("Index not found")
+end
+function setindex!( pp::DatasetParseParams, value, entry::Symbol)
+	if entry == :missingValueToken
+		@assert(isa(value, String))
+		ccall( (:datasetparseparams_setMissingValueToken, LIB_SMILE), Void, (Ptr{Void},Ptr{Uint8}), pp.ptr, bytestring(value) )
+	elseif entry == :missingInt
+		return ccall( (:datasetparseparams_setMissingInt, LIB_SMILE), Void, (Ptr{Void},Int32), pp.ptr, value )
+	elseif entry == :missingFloat
+		return ccall( (:datasetparseparams_setMissingFloat, LIB_SMILE), Void, (Ptr{Void},Float32), pp.ptr, value )
+	elseif entry == :columnIdsPresent
+		return ccall( (:datasetparseparams_setColumnIdsPresent, LIB_SMILE), Void, (Ptr{Void},Bool), pp.ptr, value )
+	else
+		error("Index not found")
+	end
 end

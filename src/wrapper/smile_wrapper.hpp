@@ -97,9 +97,11 @@ extern "C" void         syscoord_SetUncheckedValue( void * void_syscoord, double
 //             DSL_DATASET           //
 ///////////////////////////////////////
 extern "C" void *       createDataset();
+extern "C" void *       copyDataset( void * void_dataset );
 extern "C" void         freeDataset( void * void_dataset );
 extern "C" void         dataset_addFloatVar( void * void_dataset, char *varName );
 extern "C" void         dataset_discretize( void * void_dataset, int var, int nBins, char *statePrefix);
+extern "C" void         dataset_discretize_withedges( void * void_dataset, int var, int nBins, char *statePrefix, double *edges);
 extern "C" unsigned     dataset_discretize_getedges( void * void_dataset, int var, int nBins, char *statePrefix, double *binEdges);
 extern "C" float 	    dataset_getFloat( void * void_dataset, int var, int rec );
 extern "C" int 	        dataset_getInt( void * void_dataset, int var, int rec );
@@ -131,6 +133,22 @@ extern "C" int          datasetvarinfo_getMissingInt( void * void_datasetvi );
 extern "C" float        datasetvarinfo_getMissingFloat( void * void_datasetvi );
 extern "C" unsigned     datasetvarinfo_getStateNamesSize( void * void_datasetvi );
 extern "C" bool         datasetvarinfo_getStateNameAt( void * void_datasetvi, char *stateName, unsigned index );
+
+///////////////////////////////////////
+//       DSL_DATASET_PARSEPARAMS     //
+///////////////////////////////////////
+
+extern "C" void *       createDatasetParseParams();
+extern "C" void         freeDatasetParseParams( void * void_datasetpp );
+extern "C" void         datasetparseparams_getMissingValueToken( void * void_datasetpp, char * retval );
+extern "C" int          datasetparseparams_getMissingInt( void * void_datasetpp );
+extern "C" float        datasetparseparams_getMissingFloat( void * void_datasetpp );
+extern "C" bool         datasetparseparams_getColumnIdsPresent( void * void_datasetpp );
+extern "C" void         datasetparseparams_setMissingValueToken( void * void_datasetpp, char * str );
+extern "C" void         datasetparseparams_setMissingInt( void * void_datasetpp, int i );
+extern "C" void         datasetparseparams_setMissingFloat( void * void_datasetpp, float f );
+extern "C" void         datasetparseparams_setColumnIdsPresent( void * void_datasetpp, bool b );
+
 
 ///////////////////////////////////////
 //             DSL_DMATRIX           //

@@ -22,6 +22,8 @@ else
 
 	global const LIB_SMILE = find_library(["libsmilejl"], [pathtoadd])
 
+	import Base: getindex, setindex!
+
 	include("low_level/types.jl")
 	include("low_level/network.jl")
 	include("low_level/utils.jl")
