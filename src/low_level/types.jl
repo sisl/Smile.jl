@@ -1,4 +1,4 @@
-export  Dataset, DatasetVarInfo, DatasetParseParams
+export  Dataset, DatasetVarInfo, DatasetParseParams, DatasetWriteParams
 export  DoubleArray
 export  Header
 export  IdArray
@@ -24,17 +24,6 @@ type Dataset
 		smart_p
 	end
 end
-
-type DatasetVarInfo
-	ptr::Ptr{Void}
-
-	function DatasetVarInfo()
-		ptr = ccall( (:createDatasetVarInfo, LIB_SMILE), Ptr{Void}, ())
-		smart_p = new(ptr)
-		finalizer(smart_p, obj -> ccall( (:freeDatasetVarInfo, LIB_SMILE), Void, (Ptr{Void},), obj.ptr ))
-		smart_p
-	end
-end
 type DatasetParseParams
 	ptr::Ptr{Void}
 
@@ -42,6 +31,16 @@ type DatasetParseParams
 		ptr = ccall( (:createDatasetParseParams, LIB_SMILE), Ptr{Void}, ())
 		smart_p = new(ptr)
 		finalizer(smart_p, obj -> ccall( (:freeDatasetParseParams, LIB_SMILE), Void, (Ptr{Void},), obj.ptr ))
+		smart_p
+	end
+end
+type DatasetWriteParams
+	ptr::Ptr{Void}
+
+	function DatasetWriteParams()
+		ptr = ccall( (:createDatasetWriteParams, LIB_SMILE), Ptr{Void}, ())
+		smart_p = new(ptr)
+		finalizer(smart_p, obj -> ccall( (:freeDatasetWriteParams, LIB_SMILE), Void, (Ptr{Void},), obj.ptr ))
 		smart_p
 	end
 end

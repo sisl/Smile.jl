@@ -35,6 +35,7 @@ else
 	include("low_level/dataset.jl")
 	include("low_level/nodevalue.jl")
 	include("low_level/dmatrix.jl")
+	include("low_level/learning.jl")
 
 	include("high_level/learning.jl")
 end

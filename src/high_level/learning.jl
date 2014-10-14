@@ -1,64 +1,42 @@
-export
-		NetworkLearningParams,
-		matrix_to_dataset,
-		learn_bayesian_search,
-		learn_bayesian_search!,
-		alphanumeric_names
+export  alphanumeric_names
 
 # ----------
 # types
 
-type NetworkLearningParams
-	maxparents           :: Int            # limits the maximum number of parents a node can have
-	maxsearchtime        :: Int            # maximum runtime of the algorithm [seconds?] (0 = infinite)
-	niterations          :: Int            # number of searches (and indirectly number of random restarts)
-    linkprobability      :: Float64        # defines the probabilty of having an arc between two nodes
-    priorlinkprobability :: Float64        # defines a prior existence of an arc between two nodes
-    priorsamplesize      :: Int            # influences the "strength" of prior link probability.
-    seed                 :: Int            # random seed (0=none)
-    forced_arcs          :: Vector{Tuple}  # a list of (i->j) arcs which are forced to be in the network
-    forbidden_arcs       :: Vector{Tuple}  # a list of (i->j) arcs which are forbidden in the network
-    tiers                :: Vector{Tuple}  # a list of (i->tier) associating nodes with a particular tier
-
-    NetworkLearningParams() = new(5, 0, 20, 0.1, 0.001, 50, 0, Array(Tuple,0), Array(Tuple,0), Array(Tuple,0))
-end
-
 # ----------
 # functions
 
-function learn_bayesian_search!( dset::Dataset, net::Network, params::NetworkLearningParams )
-	return learn_bayesian_search!( dset, net,
-		maxparents           = params.maxparents,
-		maxsearchtime        = params.maxsearchtime,
-		niterations          = params.niterations,
-    	linkprobability      = params.linkprobability, 
-    	priorlinkprobability = params.priorlinkprobability,
-    	priorsamplesize      = params.priorsamplesize, 
-    	seed                 = params.seed, 
-    	forced_arcs          = params.forced_arcs,
-    	forbidden_arcs       = params.forbidden_arcs, 
-    	tiers                = params.tiers 
-	    )
-end
-function learn_bayesian_search( mat::Matrix{Int} )
+function learn( mat::Matrix{Int} )
 	dset = matrix_to_dataset(mat)
 	net  = Network()
-	worked = learn_bayesian_search!( dset, net )
+	worked = learn!( net, dset, DSL_BayesianSearch )
 	(net, worked)
 end
-function learn_bayesian_search( mat::Matrix{Int}, params::NetworkLearningParams )
+function learn( mat::Matrix{Int}, params )
 	dset = matrix_to_dataset(mat)
 	net  = Network()
-	worked = learn_bayesian_search!( dset, net, params )
+	
+	alg  = DSL_BayesianSearch
+	if isa(params,LearnParams_GreedyThickThinning)
+		alg - DSL_GreedyThickThinning
+	end
+
+	worked = learn!( net, dset, alg, params=params )
 	(net, worked)
 end
-function learn_bayesian_search!( mat::Matrix{Int}, net::Network )
+function learn( mat::Matrix{Int}, alg, params )
 	dset = matrix_to_dataset(mat)
-	return learn_bayesian_search!( dset, net )
+	net  = Network()
+	worked = learn!( net, dset, alg, params=params )
+	(net, worked)
 end
-function learn_bayesian_search!( mat::Matrix{Int}, net::Network, params::NetworkLearningParams )
+function learn!( mat::Matrix{Int}, net::Network )
 	dset = matrix_to_dataset(mat)
-	return learn_bayesian_search!( dset, net, params )
+	return learn!( net, dset, DSL_BayesianSearch )
+end
+function learn!( mat::Matrix{Int}, net::Network, alg, params )
+	dset = matrix_to_dataset(mat)
+	return learn!( net, dset, alg, params=params )
 end
 
 function matrix_to_dataset{R <: Real, S<:String}( mat::Matrix{R}, names::Vector{S}=alphanumeric_names(size(mat,2)) )
