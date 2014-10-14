@@ -17,6 +17,7 @@
 #include "cpp/double_array.cpp"
 #include "cpp/sys_coordinates.cpp"
 #include "cpp/dataset.cpp"
-#include "cpp/dataset_varinfo.cpp"
 #include "cpp/dataset_parseParams.cpp"
+#include "cpp/dataset_writeParams.cpp"
 #include "cpp/matrix.cpp"
+#include "cpp/learning.cpp"

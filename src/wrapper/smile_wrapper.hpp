@@ -99,27 +99,47 @@ extern "C" void         syscoord_SetUncheckedValue( void * void_syscoord, double
 extern "C" void *       createDataset();
 extern "C" void *       copyDataset( void * void_dataset );
 extern "C" void         freeDataset( void * void_dataset );
-extern "C" void         dataset_addFloatVar( void * void_dataset, char *varName );
-extern "C" void         dataset_discretize( void * void_dataset, int var, int nBins, char *statePrefix);
-extern "C" void         dataset_discretize_withedges( void * void_dataset, int var, int nBins, char *statePrefix, double *edges);
-extern "C" unsigned     dataset_discretize_getedges( void * void_dataset, int var, int nBins, char *statePrefix, double *binEdges);
-extern "C" float 	    dataset_getFloat( void * void_dataset, int var, int rec );
-extern "C" int 	        dataset_getInt( void * void_dataset, int var, int rec );
-extern "C" int          dataset_getNumberOfRecords( void * void_dataset );
-extern "C" int          dataset_getNumberOfVariables( void * void_dataset );
-extern "C" void         dataset_getVariableInfo( void * void_dataset, void * void_datasetvi, unsigned index );
-extern "C" bool			dataset_isDiscrete( void * void_dataset, int var );
-extern "C" bool			dataset_isMissing( void * void_dataset, int var, int rec );
-extern "C" bool			dataset_learnBayesianSearch( void * void_dataset, void * void_net, int max_parents, int max_search_time, int n_iterations, double link_probability, double prior_link_probability, int prior_sample_size, int seed, int * forcedarcs, int n_forcedarcs, int * forbiddenarcs, int n_forbiddenarcs, int * tiers, int lentiers );
-extern "C" bool         dataset_learnDBN( void * void_dataset, void * void_net, int max_parents, int max_search_time, int n_iterations, double link_probability, double prior_link_probability, int prior_sample_size, int seed );
-extern "C" bool			dataset_learnGreedyThickThinning( void * void_dataset, void * void_net );
+
 extern "C" int          dataset_readFile( void * void_dataset, char * filename );
-extern "C" void         dataset_removeVar( void * void_dataset, int var );
-extern "C" void         dataset_setNumberOfRecords( void * void_dataset, int nRecords );
-extern "C" void         dataset_setFloat( void * void_dataset, int var, int rec, float value );
-extern "C" int 	        dataset_setId( void * void_dataset, int var, char* newId);
-extern "C" bool			dataset_setStateNames( void * void_dataset, int var, char** newNames, unsigned nNames );
+extern "C" int          dataset_readFile_withparams( void * void_dataset, char * filename, void * void_params );
 extern "C" int          dataset_writeFile( void * void_dataset, char * filename );
+extern "C" int          dataset_writeFile_withparams( void * void_dataset, char * filename, void * void_params );
+
+extern "C" int          dataset_addIntVar( void * void_dataset, char *varName, int missingValue );
+extern "C" int          dataset_addFloatVar( void * void_dataset, char *varName, float missingValue );
+extern "C" int          dataset_removeVar( void * void_dataset, int var );
+extern "C" void         dataset_addEmptyRecord( void * void_dataset );
+extern "C" void         dataset_setNumberOfRecords( void * void_dataset, int numRecords );
+extern "C" int          dataset_removeRecord( void * void_dataset, int rec );
+
+extern "C" int          dataset_findVariable( void * void_dataset, char *id );
+extern "C" int          dataset_getNumberOfVariables( void * void_dataset );
+extern "C" int          dataset_getNumberOfRecords( void * void_dataset );
+
+extern "C" int 	        dataset_getInt( void * void_dataset, int var, int rec );
+extern "C" float 	    dataset_getFloat( void * void_dataset, int var, int rec );
+extern "C" void         dataset_setInt( void * void_dataset, int var, int rec, int value );
+extern "C" void         dataset_setFloat( void * void_dataset, int var, int rec, float value );
+extern "C" void         dataset_setMissing( void * void_dataset, int var, int rec );
+extern "C" int          dataset_getMissingInt( void * void_dataset, int var );
+extern "C" float        dataset_getMissingFloat( void * void_dataset, int var );
+extern "C" bool			dataset_isMissing( void * void_dataset, int var, int rec );
+extern "C" bool			dataset_isDiscrete( void * void_dataset, int var );
+extern "C" void         dataset_getIntData( void * void_dataset, int var, int * retval );
+extern "C" void         dataset_getFloatData( void * void_dataset, int var, float * retval );
+extern "C" void         dataset_getId( void * void_dataset, int var, char * str );
+extern "C" int 	        dataset_setId( void * void_dataset, int var, char* newId);
+
+extern "C" int          dataset_getNumStates( void * void_dataset, int var );
+extern "C" void         dataset_getStateNames( void * void_dataset, int var, char** names );
+extern "C" int	     	dataset_setStateNames( void * void_dataset, int var, char** newNames );
+
+extern "C" bool         dataset_hasMissingData( void * void_dataset, int var );
+extern "C" bool         dataset_isConstant( void * void_dataset, int var );
+
+extern "C" void         dataset_discretize( void * void_dataset, int var, int nBins, char *statePrefix, int alg);
+extern "C" void         dataset_discretize_withedges( void * void_dataset, int var, int nBins, char *statePrefix, double *edges);
+extern "C" unsigned     dataset_discretize_getedges( void * void_dataset, int var, int nBins, char *statePrefix, int alg, double *binEdges);
 
 ///////////////////////////////////////
 //         DSL_DATASET_VARINFO       //
@@ -149,6 +169,22 @@ extern "C" void         datasetparseparams_setMissingInt( void * void_datasetpp,
 extern "C" void         datasetparseparams_setMissingFloat( void * void_datasetpp, float f );
 extern "C" void         datasetparseparams_setColumnIdsPresent( void * void_datasetpp, bool b );
 
+///////////////////////////////////////
+//       DSL_DATASET_WRITEPARAMS     //
+///////////////////////////////////////
+
+extern "C" void *       createDatasetWriteParams();
+extern "C" void         freeDatasetWriteParams( void * void_datasetpp );
+extern "C" void         datasetwriteparams_getMissingValueToken( void * void_datasetpp, char * retval );
+extern "C" bool         datasetwriteparams_getColumnIdsPresent( void * void_datasetpp );
+extern "C" bool         datasetwriteparams_getUseStateIndices( void * void_datasetpp );
+extern "C" char         datasetwriteparams_getSeparator( void * void_datasetpp );
+extern "C" void         datasetwriteparams_getFloatFormat( void * void_datasetpp, char * retval );
+extern "C" void         datasetwriteparams_setMissingValueToken( void * void_datasetpp, char * str );
+extern "C" void         datasetwriteparams_setColumnIdsPresent( void * void_datasetpp, bool b );
+extern "C" void         datasetwriteparams_setUseStateIndices( void * void_datasetpp, bool b );
+extern "C" void         datasetwriteparams_setSeparator( void * void_datasetpp, char c );
+extern "C" void         datasetwriteparams_setFloatFormat( void * void_datasetpp, char * str );
 
 ///////////////////////////////////////
 //             DSL_DMATRIX           //
@@ -159,5 +195,12 @@ extern "C" double       dmatrix_GetAtInd( void * void_dmat, int index );
 extern "C" int 			dmatrix_GetNumberOfDimensions( void * void_dmat );
 extern "C" int 			dmatrix_GetSize( void * void_dmat );
 extern "C" int          dmatrix_GetSizeOfDimension( void * void_dmat, int aDimension );
+
+///////////////////////////////////////
+//             LEARNING              //
+///////////////////////////////////////
+
+extern "C" bool			dataset_learnBayesianSearch( void * void_dataset, void * void_net, int max_parents, int max_search_time, int n_iterations, double link_probability, double prior_link_probability, int prior_sample_size, int seed, int * forcedarcs, int n_forcedarcs, int * forbiddenarcs, int n_forbiddenarcs, int * tiers, int lentiers );
+extern "C" bool			dataset_learnGreedyThickThinning( void * void_dataset, void * void_net, int priors, int maxParents, double netWeight );
 
 #endif
