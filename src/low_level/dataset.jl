@@ -1,11 +1,12 @@
-export  read_file, write_file
-export  add_int_var, add_float_var, remove_var, add_empty_record, set_number_of_records, remove_record
-export  find_variable, get_number_of_records, get_number_of_variables
-export  get_int, get_float, set_int, set_float, set_missing, get_missing_int, get_missing_float
-export  is_missing, is_discrete, get_int_data, get_float_data, get_id, set_id
-export  get_num_states, get_state_names, set_state_names
-export  has_missing_data, is_constant
-export  discretize, discretize_with_info
+export read_file, write_file
+export add_int_var, add_float_var, remove_var, add_empty_record, set_number_of_records, remove_record
+export find_variable, get_number_of_records, get_number_of_variables
+export get_int, get_float, set_int, set_float, set_missing, get_missing_int, get_missing_float
+export is_missing, is_discrete, get_int_data, get_float_data, get_id, set_id
+export get_num_states, get_state_names, set_state_names
+export has_missing_data, is_constant
+export discretize, discretize_with_info
+export disc_alg_string
 export DSL_DISCRETIZE_HIERARCHICAL, DSL_DISCRETIZE_UNIFORMWIDTH, DSL_DISCRETIZE_UNIFORMCOUNT
 export DSL_MISSING_INT, DSL_MISSING_FLOAT
 
@@ -247,6 +248,38 @@ function discretize_with_info(
 		dset.ptr, var, nBins, bytestring(statePrefix), algorithm, binEdges )
 	binEdges = binEdges[1:nActualBins]
 	return binEdges
+end
+function discretize{T<:Real}( 
+	data  :: Vector{T}, 
+	nBins :: Integer;
+	statePrefix :: String = "s",
+	algorithm   :: Cint   = DSL_DISCRETIZE_HIERARCHICAL
+	)
+
+	
+	n = length(data)
+	@assert(n > 1)
+
+	dset = Dataset()
+	add_float_var(dset, "A")
+	set_number_of_records(dset, n)
+	dset[0,0:n-1] = float32(data)
+
+	minv, maxv = extrema(data)
+	binedges = discretize_with_info(dset, 0, nBins, statePrefix=statePrefix, algorithm=algorithm)
+	discretized = dset[0,0:n-1]
+	(discretized, [minv, binedges, maxv])
+end
+
+function disc_alg_string( alg::Cint )
+	if alg == DSL_DISCRETIZE_HIERARCHICAL
+		return "HIERARCHICAL"
+	elseif alg == DSL_DISCRETIZE_UNIFORMWIDTH
+		return "UNIFORMWIDTH"
+	elseif alg == DSL_DISCRETIZE_UNIFORMCOUNT
+		return "UNIFORMCOUNT"
+	end
+	error("alg not found")
 end
 
 # DatasetParseParams - a struct within DSL_dataset

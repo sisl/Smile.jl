@@ -9,6 +9,7 @@
 
 #include "cpp/util.cpp"
 #include "cpp/network.cpp"
+#include "cpp/pattern.cpp"
 #include "cpp/node.cpp"
 #include "cpp/node_definition.cpp"
 #include "cpp/node_value.cpp"

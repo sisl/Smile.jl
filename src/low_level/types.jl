@@ -3,6 +3,7 @@ export  DoubleArray
 export  Header
 export  IdArray
 export  Network
+export  Pattern
 export  Node
 export  NodeDefinition
 export  NodeValue
@@ -87,6 +88,42 @@ type Network
 		smart_p
 	end
 end
+
+for str = ("Pattern",)
+	fname = symbol(str)
+	f_sym 
+
+	# op_cr = :($(symbol("create"*str))) #symbol("create"*str)
+	op_cr = :(:createPattern)
+	op_fr = :(:freePattern)    #symbol("free"*str)
+
+	# println(macroexpand(op_cr))
+	# println(macroexpand(op_fr))
+
+	@eval begin
+		type $fname
+			ptr::Ptr{Void}
+
+			function ($fname)()
+				ptr = ccall( ($op_cr, LIB_SMILE), Ptr{Void}, ())
+				smart_p = new(ptr)
+				finalizer(smart_p, obj -> ccall( ($op_fr, LIB_SMILE), Void, (Ptr{Void},), obj.ptr ))
+				smart_p
+			end
+		end
+	end
+end
+
+# type Pattern # HERE
+# 	ptr::Ptr{Void}
+
+# 	function Pattern()
+# 		ptr = ccall( (:createPattern, LIB_SMILE), Ptr{Void}, ())
+# 		smart_p = new(ptr)
+# 		finalizer(smart_p, obj -> ccall( (:freePattern, LIB_SMILE), Void, (Ptr{Void},), obj.ptr ))
+# 		smart_p
+# 	end
+# end
 
 type Node
 

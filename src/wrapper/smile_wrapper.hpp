@@ -36,6 +36,30 @@ extern "C" int          network_LearnDynamicBayesianNetwork( void * void_net, vo
 extern "C" int          network_ReadFile(void * void_net, char *thisFile);
 extern "C" int          network_WriteFile(void * void_net, char *thisFile);
 
+
+///////////////////////////////////////
+//            DSL_PATTERN            //
+///////////////////////////////////////
+
+extern "C" void *       createPattern();
+extern "C" void         freePattern(void * void_pattern);
+extern "C" int          pattern_getSize( void * void_pattern );
+extern "C" void         pattern_setSize( void * void_pattern, int size );
+extern "C" int          pattern_getEdge( void * void_pattern, int from, int to );
+extern "C" void         pattern_setEdge( void * void_pattern, int from, int to, int edgetype );
+extern "C" bool         pattern_hasDirectedPath( void * void_pattern, int from, int to );
+extern "C" bool         pattern_hasCycle( void * void_pattern );
+extern "C" bool         pattern_isDAG( void * void_pattern );
+extern "C" bool         pattern_toDAG( void * void_pattern );
+extern "C" void         pattern_set( void * void_pattern, void * void_net );
+extern "C" bool         pattern_toNetwork( void * void_pattern, void * void_dset, void * void_net );
+extern "C" bool         pattern_hasIncomingEdge( void * void_pattern, int to );
+extern "C" bool         pattern_hasOutgoingEdge( void * void_pattern, int from );
+extern "C" void         pattern_print( void * void_pattern );
+extern "C" int          pattern_getAdjacentNodes( void * void_pattern, int node, int * arr );
+extern "C" int          pattern_getParents( void * void_pattern, int node, int * arr );
+extern "C" int          pattern_getChildren( void * void_pattern, int node, int * arr );
+
 ///////////////////////////////////////
 //              DSL_NODE             //
 ///////////////////////////////////////
@@ -201,6 +225,9 @@ extern "C" int          dmatrix_GetSizeOfDimension( void * void_dmat, int aDimen
 ///////////////////////////////////////
 
 extern "C" bool			dataset_learnBayesianSearch( void * void_dataset, void * void_net, int max_parents, int max_search_time, int n_iterations, double link_probability, double prior_link_probability, int prior_sample_size, int seed, int * forcedarcs, int n_forcedarcs, int * forbiddenarcs, int n_forbiddenarcs, int * tiers, int lentiers );
-extern "C" bool			dataset_learnGreedyThickThinning( void * void_dataset, void * void_net, int priors, int maxParents, double netWeight );
+extern "C" bool			dataset_learnGreedyThickThinning( void * void_dataset, void * void_net, int priors, int maxParents, double netWeight, int * forcedarcs, int n_forcedarcs, int * forbiddenarcs, int n_forbiddenarcs, int * tiers, int lentiers );
+extern "C" bool	        dataset_learnNaiveBayes( void * void_dataset, void * void_net, char * classVariableId );
+extern "C" bool	        dataset_learnPC( void * void_dataset, void * void_pat, unsigned long maxcache, int maxAdjacency, int maxSearchTime, double significance, int * forcedarcs, int n_forcedarcs, int * forbiddenarcs, int n_forbiddenarcs, int * tiers, int lentiers );
+extern "C" bool         dataset_learnTAN( void * void_dataset, void * void_net, char * classvar, int maxSearchTime, unsigned int seed, unsigned long maxcache );
 
 #endif
