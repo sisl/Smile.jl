@@ -26,7 +26,7 @@ else
 
 	include("low_level/types.jl")
 	include("low_level/network.jl")
-	include("low_level/utils.jl")
+	include("low_level/pattern.jl")
 	include("low_level/node.jl")
 	include("low_level/nodedefinition.jl")
 	include("low_level/idarray.jl")
