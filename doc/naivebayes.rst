@@ -23,5 +23,5 @@ Examples
 .. code-block:: julia
 
 	net = Network()
-	learn!( net, dset, LearnParams_NaiveBayes("target"))
+	learn!( net, dset, LearnParams_NaiveBayes())
 	
