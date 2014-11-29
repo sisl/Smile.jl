@@ -5,5 +5,23 @@ This learning algorithm creates a `Naive Bayes`_ graph structure in which a sing
 
 .. _`Naive Bayes`: https://dslpitt.org/genie/wiki/Reference_Manual:_DSL_bs
 
-.. image:: https://raw.githubusercontent.com/sisl/Smile.jl/master/doc/bayesnets.png
+.. image:: https://raw.githubusercontent.com/sisl/Smile.jl/master/doc/naive_bayes.png
 
+Parameters
+----------
+
+**classVariableId**: the variable id corresponding to the class variable
+
+.. code-block:: julia
+
+	LearnParams_NaiveBayes() = new("class")
+	LearnParams_NaiveBayes(var::String) = new(var)
+
+Examples
+--------
+
+.. code-block:: julia
+
+	net = Network()
+	learn!( net, dset, LearnParams_NaiveBayes("target"))
+	
