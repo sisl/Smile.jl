@@ -14,12 +14,15 @@ The probability tables are filled out using Expectation Maximization.
 Parameters
 ----------
 
-**classVariableId**: the variable id corresponding to the class variable
+**classvar**: the variable id corresponding to the class variable, ``String``
+**maxSearchTime**: the maximum runtime for the algorithm, milliseconds, ``Cint``
+**seed**: the random seed to use, 0 for time-based random seed, ``Uint32``
+**maxcache**: the maximum cache size, ``Uint64``
 
 .. code-block:: julia
 
-	LearnParams_NaiveBayes() = new("class")
-	LearnParams_NaiveBayes(var::String) = new(var)
+	LearnParams_TreeAugmentedNaiveBayes() = new("class", 0, 0, 2048)
+	LearnParams_TreeAugmentedNaiveBayes(class) = new(class, 0, 0, 2048)
 
 Examples
 --------
@@ -27,14 +30,14 @@ Examples
 .. code-block:: julia
 
 	net = Network()
-	learn!( net, dset, LearnParams_NaiveBayes())
+	learn!( net, dset, LearnParams_TreeAugmentedNaiveBayes())
 
 Algorithm
 ---------
 
-The TAN algorithm is :math:`O(n^2 \log n)`, where *n* is the number of graph vertices:
+The TAN algorithm is :math:`O(n^2 \text{log} n)`, where *n* is the number of graph vertices:
 
-1. Compute the mutual information between each pair of attributes
+1. Compute the mutual information :math:`a^2 + b^2 = c^2` between each pair of attributes
 
 2. Build a complete undirected graph in which the vertices are the attributes :math:`A_1,\ldots,A_n`. The edges are weighted according to the pairwise mutual information
 
