@@ -38,7 +38,7 @@ Examples
 Algorithm
 ---------
 
-The TAN algorithm is outlined below:
+The TAN algorithm is :math:`O(n^2 \text{log} n)`, where *n* is the number of graph vertices:
 
 1. Compute the mutual information between each pair of attributes
 
@@ -49,13 +49,6 @@ The TAN algorithm is outlined below:
 4. Transform the resulting undirected graph to a directed graph by selecting the class variable as the root node and seeting the direction of all edges outward from it
 
 5. Construct a TAN model by adding an arc from the class variable to all other variables
-
-Complexity
-~~~~~~~~~~
-
-.. math::
-
-    O(n^2 \log n)
 
 Reference
 ---------
