@@ -15,8 +15,11 @@ Parameters
 ----------
 
 **classvar**: the variable id corresponding to the class variable, ``String``
+
 **maxSearchTime**: the maximum runtime for the algorithm, milliseconds, ``Cint``
+
 **seed**: the random seed to use, 0 for time-based random seed, ``Uint32``
+
 **maxcache**: the maximum cache size, ``Uint64``
 
 .. code-block:: julia
@@ -35,14 +38,28 @@ Examples
 Algorithm
 ---------
 
-The TAN algorithm is :math:`O(n^2 \text{log} n)`, where *n* is the number of graph vertices:
+The TAN algorithm is outlined below:
 
-1. Compute the mutual information :math:`a^2 + b^2 = c^2` between each pair of attributes
+1. Compute the mutual information between each pair of attributes
 
-2. Build a complete undirected graph in which the vertices are the attributes :math:`A_1,\ldots,A_n`. The edges are weighted according to the pairwise mutual information
+2. Build a complete undirected graph in which the vertices are the attributes *n* variables. The edges are weighted according to the pairwise mutual information
 
 3. Build a maximum weighted spanning tree
 
 4. Transform the resulting undirected graph to a directed graph by selecting the class variable as the root node and seeting the direction of all edges outward from it
 
 5. Construct a TAN model by adding an arc from the class variable to all other variables
+
+Complexity
+~~~~~~~~~~
+
+.. math::
+
+    O(n^2 \log n)
+
+Reference
+---------
+
+The Decision Systems Laboratory recommends the following reference:
+
+	Friedman, N., Geiger, D., & Goldszmidt, M. (1997). Bayesian network classifiers. *Machine learning*, 29(2), 131-163.
