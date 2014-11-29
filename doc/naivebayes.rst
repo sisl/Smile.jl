@@ -5,5 +5,5 @@ This learning algorithm creates a `Naive Bayes`_ graph structure in which a sing
 
 .. _`Naive Bayes`: https://dslpitt.org/genie/wiki/Reference_Manual:_DSL_bs
 
-.. image:: naivebayes.png
+.. image:: https://github.com/sisl/Smile.jl/tree/master/doc/naivebayes.png
 
