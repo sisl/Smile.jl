@@ -8,6 +8,10 @@ A Julia wrapper for the **[Smile C++ Structural Modeling, Inference, and Learnin
 
 [![Smile](http://pkg.julialang.org/badges/Smile_release.svg)](http://pkg.julialang.org/?pkg=Smile&ver=release)
 
+[![Documentation Status](https://readthedocs.org/projects/smile/badge/?version=latest)](https://readthedocs.org/projects/smile/?badge=latest)
+
+
+
 ## Documentation
 
 Library documentation is available **[here]**.
