@@ -13,7 +13,7 @@ The *Smile.jl* package is a wrapper for the C++ SMILE librarydeveloped by the De
    installation.rst
    quickstart_guide.rst
    naivebayes.rst
-
+   treeaugmentednaivebayes.rst
 
 .. Indices and tables
 .. ==================
