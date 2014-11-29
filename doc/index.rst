@@ -16,6 +16,7 @@ The *Smile.jl* package is a wrapper for the C++ SMILE librarydeveloped by the De
    treeaugmentednaivebayes.rst
    bayesiansearch.rst
    greedythickthinning.rst
+   pc.rst
 
 .. Indices and tables
 .. ==================
