@@ -1,7 +1,7 @@
 Bayesian Search
-==========================
+===============
 
-This learning algorithm used the `Bayesian Search`_ procedure. It is a general-purpose graph structure learning algorithm, meaning it will attempt to search the full space of graphs for the best graph.
+This learning algorithm uses the `Bayesian Search`_ procedure. It is a general-purpose graph structure learning algorithm, meaning it will attempt to search the full space of graphs for the best graph.
 
 The probability tables are filled out using Expectation Maximization.
 
