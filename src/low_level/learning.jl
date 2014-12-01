@@ -74,7 +74,7 @@ end
 
 # ------
 
-function learn!( net::Network, dset::Dataset, ::Type{DSL_BayesianSearch}; 
+function learn!( net::Network, dset::Dataset, ::Type{DSL_BayesianSearch},
 	params::LearnParams_BayesianSearch = LearnParams_BayesianSearch()
 	)
 
@@ -95,7 +95,7 @@ function learn!( net::Network, dset::Dataset, ::Type{DSL_BayesianSearch};
 	end
 	return retval # true on success
 end
-function learn!( net::Network, dset::Dataset, ::Type{DSL_GreedyThickThinning}; 
+function learn!( net::Network, dset::Dataset, ::Type{DSL_GreedyThickThinning}, 
 	params::LearnParams_GreedyThickThinning = LearnParams_GreedyThickThinning()
 	)
 
@@ -114,7 +114,7 @@ function learn!( net::Network, dset::Dataset, ::Type{DSL_GreedyThickThinning};
 	end
 	return retval # true on success
 end
-function learn!( net::Network, dset::Dataset, ::Type{DSL_NaiveBayes}; 
+function learn!( net::Network, dset::Dataset, ::Type{DSL_NaiveBayes}, 
 	params::LearnParams_NaiveBayes = LearnParams_NaiveBayes()
 	)
 
@@ -130,7 +130,7 @@ function learn!( net::Network, dset::Dataset, ::Type{DSL_NaiveBayes};
 	end
 	return retval # true on success
 end
-function learn!( pat::Pattern, dset::Dataset, ::Type{DSL_PC};
+function learn!( pat::Pattern, dset::Dataset, ::Type{DSL_PC},
 	params::LearnParams_PC = LearnParams_PC()
 	)
 
@@ -150,7 +150,7 @@ function learn!( pat::Pattern, dset::Dataset, ::Type{DSL_PC};
 	end
 	return retval # true on success
 end
-function learn!( net::Network, dset::Dataset, ::Type{DSL_TreeAugmentedNaiveBayes}; 
+function learn!( net::Network, dset::Dataset, ::Type{DSL_TreeAugmentedNaiveBayes}, 
 	params::LearnParams_TreeAugmentedNaiveBayes = LearnParams_TreeAugmentedNaiveBayes()
 	)
 
@@ -166,6 +166,17 @@ function learn!( net::Network, dset::Dataset, ::Type{DSL_TreeAugmentedNaiveBayes
 	end
 	return retval # true on success
 end
+
+learn!( net::Network, dset::Dataset, params::LearnParams_BayesianSearch ) = 
+	learn!(net, dset, DSL_BayesianSearch, params)
+learn!( net::Network, dset::Dataset, params::LearnParams_GreedyThickThinning ) = 
+	learn!(net, dset, DSL_GreedyThickThinning, params)
+learn!( net::Network, dset::Dataset, params::LearnParams_NaiveBayes ) = 
+	learn!(net, dset, DSL_NaiveBayes, params)
+learn!( net::Network, dset::Dataset, params::LearnParams_PC ) = 
+	learn!(net, dset, DSL_PC, params)
+learn!( net::Network, dset::Dataset, params::LearnParams_TreeAugmentedNaiveBayes ) = 
+	learn!(net, dset, DSL_TreeAugmentedNaiveBayes, params)
 
 function learn( dset::Dataset )
 	net = Network()
