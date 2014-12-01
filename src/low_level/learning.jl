@@ -21,7 +21,8 @@ type DSL_TreeAugmentedNaiveBayes <: DSL_LearningAlgorithm end
 
 # -------
 
-type LearnParams_BayesianSearch
+abstract DSL_LearnParams
+type LearnParams_BayesianSearch <: DSL_LearnParams
 	maxparents           :: Int            # limits the maximum number of parents a node can have
 	maxsearchtime        :: Int            # maximum runtime of the algorithm [seconds?] (0 = infinite)
 	niterations          :: Int            # number of searches (and indirectly number of random restarts)
@@ -31,11 +32,11 @@ type LearnParams_BayesianSearch
     seed                 :: Int            # random seed (0=none)
     forced_arcs          :: Vector{Tuple}  # a list of (i->j) arcs which are forced to be in the network
     forbidden_arcs       :: Vector{Tuple}  # a list of (i->j) arcs which are forbidden in the network
-    tiers                :: Vector{Tuple}  # a list of (i->tier) associating nodes with a particular tier
+    tiers                :: Vector{Tuple}  # a list of (i->tier) associating nodes with a particular tier (tier starts at 1, variable starts at 0)
 
     LearnParams_BayesianSearch() = new(5, 0, 20, 0.1, 0.001, 50, 0, Array(Tuple,0), Array(Tuple,0), Array(Tuple,0))
 end
-type LearnParams_GreedyThickThinning
+type LearnParams_GreedyThickThinning <: DSL_LearnParams
 	maxparents           :: Int # limits the maximum number of parents a node can have
 	priors               :: Int # either K2 or BDeu
 	netWeight            :: Float64
@@ -50,7 +51,7 @@ type LearnParams_NaiveBayes
 	LearnParams_NaiveBayes() = new("class")
 	LearnParams_NaiveBayes(var::String) = new(var)
 end
-type LearnParams_PC
+type LearnParams_PC <: DSL_LearnParams
 	maxcache      :: Uint64
 	maxAdjacency  :: Cint
 	maxSearchTime :: Cint
@@ -61,7 +62,7 @@ type LearnParams_PC
 
 	LearnParams_PC() = new(2048, 8, 0, 0.05, Array(Tuple,0), Array(Tuple,0), Array(Tuple,0))
 end
-type LearnParams_TreeAugmentedNaiveBayes
+type LearnParams_TreeAugmentedNaiveBayes <: DSL_LearnParams
 	classvar      :: String # Used to pick the class variable for the network. Is case-sensitive.
 	maxSearchTime :: Cint   # maximum runtime for the algorithm
 	seed          :: Uint32 # random seed (0 for none)
@@ -80,6 +81,7 @@ function learn!( net::Network, dset::Dataset, ::Type{DSL_BayesianSearch};
 	nforcedarcs,    forcedarcs_arr    = _get_arcs_arr(params.forced_arcs)
 	nforbiddenarcs, forbiddenarcs_arr = _get_arcs_arr(params.forbidden_arcs)
 	lentiers,       tiers_arr         = _get_arcs_arr(params.tiers)
+
 
 	retval = ccall( (:dataset_learnBayesianSearch, LIB_SMILE), Bool, 
 		(Ptr{Void},Ptr{Void},Int32,Int32,Int32,Float64,Float64,Int32,Int32,
@@ -185,7 +187,7 @@ function learn( dset::Dataset, alg, params )
 	net = Network()
 	if alg == DSL_PC
 		pat = Pattern()
-		learn!(pat, dset, alg, params=params)
+		learn!(pat, dset, DSL_PC, params=params)
 		to_network(pat, dset, net)
 	else
 		learn!(net, dset, alg, params=params)

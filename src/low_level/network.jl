@@ -38,10 +38,10 @@ function get_all_nodes( net::Network )
 
 	n = get_number_of_nodes(net)
 	if n == 0
-		return []
+		return Int[]
 	end
 
-	nodeHandles = Array(Integer,n)
+	nodeHandles = Array(Int,n)
 	nodeHandles[1] = get_first_node( net )
 	for i = 2 : n
 		nodeHandles[i] = get_next_node( net, nodeHandles[i-1] )

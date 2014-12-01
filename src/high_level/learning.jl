@@ -12,18 +12,6 @@ function learn( mat::Matrix{Int} )
 	worked = learn!( net, dset, DSL_BayesianSearch )
 	(net, worked)
 end
-function learn( mat::Matrix{Int}, params )
-	dset = matrix_to_dataset(mat)
-	net  = Network()
-	
-	alg  = DSL_BayesianSearch
-	if isa(params,LearnParams_GreedyThickThinning)
-		alg - DSL_GreedyThickThinning
-	end
-
-	worked = learn!( net, dset, alg, params=params )
-	(net, worked)
-end
 function learn( mat::Matrix{Int}, alg, params )
 	dset = matrix_to_dataset(mat)
 	net  = Network()
