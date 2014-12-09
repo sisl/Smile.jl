@@ -12,12 +12,11 @@ if true # create local scope
 
 	# test learn_bayesian_search + !
 	mat = rand(1:4, 5000, 4)
-	@test learn( mat )[2]
+	@test learn( mat, DSL_BayesianSearch )[2]
 	net = Network()
-	@test learn!( mat, net )
+	@test learn!( net, mat, DSL_BayesianSearch )
 	params = LearnParams_BayesianSearch()
-	@test learn( mat, params )[2]
-	@test learn!( mat, net, DSL_BayesianSearch, params )
+	@test learn!( net, mat, params )
 
 	# test setting params
 	params.maxparents           = 1
@@ -29,5 +28,5 @@ if true # create local scope
 	params.seed                 = 1
 	push!(params.forced_arcs, (1,2))
 	push!(params.forbidden_arcs, (1,3))
-	@test learn!( mat, net, DSL_BayesianSearch, params )
+	@test learn!( net, mat, params )
 end

@@ -6,25 +6,25 @@ export  alphanumeric_names
 # ----------
 # functions
 
-function learn( mat::Matrix{Int} )
+function learn{S<:DSL_LearningAlgorithm}( mat::Matrix{Int}, alg::Type{S} )
 	dset = matrix_to_dataset(mat)
 	net  = Network()
-	worked = learn!( net, dset, DSL_BayesianSearch )
+	worked = learn!( net, dset, alg )
 	(net, worked)
 end
-function learn( mat::Matrix{Int}, alg, params )
+function learn{S<:DSL_LearnParams}( mat::Matrix{Int}, params::S )
 	dset = matrix_to_dataset(mat)
 	net  = Network()
-	worked = learn!( net, dset, alg, params=params )
+	worked = learn!( net, dset, params )
 	(net, worked)
 end
-function learn!( mat::Matrix{Int}, net::Network )
+function learn!{S<:DSL_LearningAlgorithm}( net::Network, mat::Matrix{Int}, alg::Type{S} )
 	dset = matrix_to_dataset(mat)
-	return learn!( net, dset, DSL_BayesianSearch )
+	learn!( net, dset, alg )
 end
-function learn!( mat::Matrix{Int}, net::Network, alg, params )
+function learn!{S<:DSL_LearnParams}( net::Network, mat::Matrix{Int}, params::S )
 	dset = matrix_to_dataset(mat)
-	return learn!( net, dset, alg, params=params )
+	learn!( net, dset, params )
 end
 
 function matrix_to_dataset{R <: Real, S<:String}( mat::Matrix{R}, names::Vector{S}=alphanumeric_names(size(mat,2)) )
