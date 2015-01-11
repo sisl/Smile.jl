@@ -7,6 +7,7 @@ export  alphanumeric_names
 # functions
 
 function learn( mat::Matrix{Int} )
+	# note: each column in mat is one variable's data
 	dset = matrix_to_dataset(mat)
 	net  = Network()
 	worked = learn!( net, dset, DSL_BayesianSearch )
@@ -41,6 +42,7 @@ end
 
 function matrix_to_dataset{R <: Real, S<:String}( mat::Matrix{R}, names::Vector{S}=alphanumeric_names(size(mat,2)) )
 	# converts a Matrix{Int} to a Dataset by writing it to a tempfile and loading it back in
+	# each column in mat is one variable's data
 	ftempname = tempname()
 	writetable(ftempname, mat, names)
 	dset = Dataset()

@@ -33,7 +33,7 @@ type LearnParams_BayesianSearch
     forbidden_arcs       :: Vector{Tuple}  # a list of (i->j) arcs which are forbidden in the network
     tiers                :: Vector{Tuple}  # a list of (i->tier) associating nodes with a particular tier
 
-    LearnParams_BayesianSearch() = new(5, 0, 20, 0.1, 0.001, 50, 0, Array(Tuple,0), Array(Tuple,0), Array(Tuple,0))
+    LearnParams_BayesianSearch() = new(5, 0, 20, 0.1, 0.001, 50, 0, Tuple[], Tuple[], Tuple[])
 end
 type LearnParams_GreedyThickThinning
 	maxparents           :: Int # limits the maximum number of parents a node can have
@@ -42,7 +42,7 @@ type LearnParams_GreedyThickThinning
 	forced_arcs          :: Vector{Tuple}  # a list of (i->j) arcs which are forced to be in the network
     forbidden_arcs       :: Vector{Tuple}  # a list of (i->j) arcs which are forbidden in the network
     tiers                :: Vector{Tuple}  # a list of (i->tier) associating nodes with a particular tier
-    LearnParams_GreedyThickThinning() = new(5, DSL_K2, 1.0, Array(Tuple,0), Array(Tuple,0), Array(Tuple,0))
+    LearnParams_GreedyThickThinning() = new(5, DSL_K2, 1.0, Tuple[], Tuple[], Tuple[])
 end
 type LearnParams_NaiveBayes
 	classVariableId :: String # the variable ID of the column that is our class
@@ -59,7 +59,7 @@ type LearnParams_PC
     forbidden_arcs :: Vector{Tuple}  # a list of (i->j) arcs which are forbidden in the network
     tiers          :: Vector{Tuple}  # a list of (i->tier) associating nodes with a particular tier
 
-	LearnParams_PC() = new(2048, 8, 0, 0.05, Array(Tuple,0), Array(Tuple,0), Array(Tuple,0))
+	LearnParams_PC() = new(2048, 8, 0, 0.05, Tuple[], Tuple[], Tuple[])
 end
 type LearnParams_TreeAugmentedNaiveBayes
 	classvar      :: String # Used to pick the class variable for the network. Is case-sensitive.
