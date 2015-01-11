@@ -25,80 +25,21 @@ type Dataset
 		smart_p
 	end
 end
-type DatasetParseParams
-	ptr::Ptr{Void}
 
-	function DatasetParseParams()
-		ptr = ccall( (:createDatasetParseParams, LIB_SMILE), Ptr{Void}, ())
-		smart_p = new(ptr)
-		finalizer(smart_p, obj -> ccall( (:freeDatasetParseParams, LIB_SMILE), Void, (Ptr{Void},), obj.ptr ))
-		smart_p
-	end
-end
-type DatasetWriteParams
-	ptr::Ptr{Void}
-
-	function DatasetWriteParams()
-		ptr = ccall( (:createDatasetWriteParams, LIB_SMILE), Ptr{Void}, ())
-		smart_p = new(ptr)
-		finalizer(smart_p, obj -> ccall( (:freeDatasetWriteParams, LIB_SMILE), Void, (Ptr{Void},), obj.ptr ))
-		smart_p
-	end
-end
-
-type DMatrix
-
+immutable DMatrix
 	ptr::Ptr{Void}
 end
 
-type DoubleArray
-	ptr::Ptr{Void}
-	
-	function DoubleArray()
-		ptr = ccall( (:createDoubleArray, LIB_SMILE), Ptr{Void}, ())
-		smart_p = new(ptr)
-		finalizer(smart_p, obj -> ccall( (:freeDoubleArray, LIB_SMILE), Void, (Ptr{Void},), obj.ptr ))
-		smart_p
-	end
-end
-
-type Header
-
+immutable Header
 	ptr::Ptr{Void}
 end
 
-type IdArray
-	ptr::Ptr{Void}
-	
-	function IdArray()
-		ptr = ccall( (:createIdArray, LIB_SMILE), Ptr{Void}, ())
-		smart_p = new(ptr)
-		finalizer(smart_p, obj -> ccall( (:freeIdArray, LIB_SMILE), Void, (Ptr{Void},), obj.ptr ))
-		smart_p
-	end
-end
-
-type Network
-	ptr::Ptr{Void}
-
-	function Network()
-		ptr = ccall( (:createNetwork, LIB_SMILE), Ptr{Void}, ())
-		smart_p = new(ptr)
-		finalizer(smart_p, obj -> ccall( (:freeNetwork, LIB_SMILE), Void, (Ptr{Void},), obj.ptr ))
-		smart_p
-	end
-end
-
-for str = ("Pattern",)
+for str = ("DatasetParseParams", "DatasetWriteParams", "DoubleArray","IdArray","Network","Pattern",)
 	fname = symbol(str)
 	f_sym 
 
-	# op_cr = :($(symbol("create"*str))) #symbol("create"*str)
-	op_cr = :(:createPattern)
-	op_fr = :(:freePattern)    #symbol("free"*str)
-
-	# println(macroexpand(op_cr))
-	# println(macroexpand(op_fr))
+	op_cr = QuoteNode(symbol("create$str"))
+	op_fr = QuoteNode(symbol("free$str"))
 
 	@eval begin
 		type $fname
@@ -114,29 +55,15 @@ for str = ("Pattern",)
 	end
 end
 
-# type Pattern # HERE
-# 	ptr::Ptr{Void}
-
-# 	function Pattern()
-# 		ptr = ccall( (:createPattern, LIB_SMILE), Ptr{Void}, ())
-# 		smart_p = new(ptr)
-# 		finalizer(smart_p, obj -> ccall( (:freePattern, LIB_SMILE), Void, (Ptr{Void},), obj.ptr ))
-# 		smart_p
-# 	end
-# end
-
-type Node
-
+immutable Node
 	ptr::Ptr{Void}
 end
 
-type NodeDefinition
-
+immutable NodeDefinition
 	ptr::Ptr{Void}
 end
 
-type NodeValue
-
+immutable NodeValue
 	ptr::Ptr{Void}
 end
 

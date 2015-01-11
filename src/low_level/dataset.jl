@@ -246,8 +246,7 @@ function discretize_with_info(
 	nActualBins = ccall( (:dataset_discretize_getedges, LIB_SMILE), Uint32, 
 		(Ptr{Void},Cint,Cint,Ptr{Uint8},Cint,Ptr{Float64}), 
 		dset.ptr, var, nBins, bytestring(statePrefix), algorithm, binEdges )
-	binEdges = binEdges[1:nActualBins]
-	return binEdges
+	binEdges[1:nActualBins]
 end
 function discretize{T<:Real}( 
 	data  :: Vector{T}, 
