@@ -21,4 +21,4 @@ end
 destfile = downloads *"/libsmilejl.so"
 println(destfile)
 
-download("http://dl.bintray.com/tawheeler/generic/libsmilejl.so", destfile)
+download("https://bintray.com/artifact/download/tawheeler/generic/generic/libsmilejl.so", destfile)
