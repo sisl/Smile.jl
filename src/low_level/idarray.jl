@@ -1,16 +1,12 @@
 export
 		add,
-		flush
+		flush,
+        find_position
 
-function add( idarr::IdArray, thisString::String )
+add( idarr::IdArray, thisString::String ) = ccall( (:idarray_Add, LIB_SMILE), Int32, (Ptr{Void},Ptr{Uint8}), idarr.ptr, bytestring(thisString) )
 
-	err_int = ccall( (:idarray_Add, LIB_SMILE), Int32, (Ptr{Void},Ptr{Uint8}), idarr.ptr, bytestring(thisString) )
-	if err_int < 0
-		error( "idarray_Add: code: ", err_int )
-	end
-end
+# String Arrays
+find_position( idarr::IdArray, ofThisString::String) = 
+    ccall( (:stringarray_FindPosition, LIB_SMILE), Int32, (Ptr{Void},Ptr{Uint8}), idarr.ptr, bytestring(ofThisString) )
 
-function flush( idarr::IdArray )
-
-	ccall( (:stringarray_Flush, LIB_SMILE), Void, (Ptr{Void},), idarr.ptr )
-end
+flush( idarr::IdArray ) = ccall( (:stringarray_Flush, LIB_SMILE), Void, (Ptr{Void},), idarr.ptr )

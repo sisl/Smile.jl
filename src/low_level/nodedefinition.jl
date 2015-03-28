@@ -1,5 +1,6 @@
 export
 		get_matrix,
+		get_outcome_names,
 		set_definition,
 		set_number_of_outcomes,
 		is_nodetype_id
@@ -46,6 +47,11 @@ const DSL_NO_DEFINITION    = unsafe_load(cglobal((:EDSL_NO_DEFINITION,   LIB_SMI
 function get_matrix( nodedef::NodeDefinition )
 	ptr = ccall( (:nodedef_GetMatrix, LIB_SMILE), Ptr{Void}, (Ptr{Void},), nodedef.ptr )
 	return DMatrix(ptr)
+end
+
+function get_outcome_names(nodedef::NodeDefinition)
+	ptr = ccall( (:nodedef_GetOutcomeNames, LIB_SMILE), Ptr{Void}, (Ptr{Void},), nodedef.ptr )
+	return IdArray(ptr)
 end
 
 function set_definition( nodedef::NodeDefinition, dblarr::DoubleArray )

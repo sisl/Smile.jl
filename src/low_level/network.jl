@@ -10,7 +10,24 @@ export
 		get_parents,
 		is_acyclic,
 		read_file,
-		write_file
+		write_file,
+		set_default_BN_algorithm,
+		set_default_ID_algorithm,
+		set_default_HBN_algorithm,
+		get_default_BN_algorithm,
+		get_default_ID_algorithm,
+		get_default_HBN_algorithm,
+		DSL_ALG_BN_LAURITZEN, DSL_ALG_BN_HENRION, DSL_ALG_BN_PEARL, DSL_ALG_BN_LSAMPLING,
+		DSL_ALG_BN_SELFIMPORTANCE, DSL_ALG_BN_HEURISTICIMPORTANCE, DSL_ALG_BN_BACKSAMPLING,
+		DSL_ALG_BN_AISSAMPLING, DSL_ALG_BN_EPISSAMPLING, DSL_ALG_BN_LBP, DSL_ALG_BN_LAURITZEN_OLD,
+		DSL_ALG_BN_RELEVANCEDECOMP, DSL_ALG_BN_RELEVANCEDECOMP2, DSL_ALG_HBN_HEPI,
+		DSL_ALG_HBN_HLW, DSL_ALG_HBN_HLBP, DSL_ALG_HBN_HLOGICSAMPLING,
+		update_beliefs,
+		invalidate_all_beliefs,
+		call_ID_algorithm,
+		call_BN_algorithm,
+		call_Eq_algorithm,
+		call_HBN_algorithm
 
 function add_arc( net::Network, theParent::Integer, theChild::Integer )
 	err_int = ccall( (:network_AddArc, LIB_SMILE), Int32, (Ptr{Void}, Int32, Int32), net.ptr, theParent, theChild)
@@ -120,3 +137,41 @@ function write_file( net::Network, fileName::String )
 	retval = ccall( (:network_WriteFile, LIB_SMILE), Int32, (Ptr{Void},Ptr{Uint8}), net.ptr, bytestring(fileName) )
 	return retval
 end
+
+# BN algorithms
+const DSL_ALG_BN_LAURITZEN            = int32( 0)
+const DSL_ALG_BN_HENRION              = int32( 1)
+const DSL_ALG_BN_PEARL                = int32( 2)
+const DSL_ALG_BN_LSAMPLING            = int32( 3)
+const DSL_ALG_BN_SELFIMPORTANCE       = int32( 4)
+const DSL_ALG_BN_HEURISTICIMPORTANCE  = int32( 5)
+const DSL_ALG_BN_BACKSAMPLING         = int32( 6)
+const DSL_ALG_BN_AISSAMPLING          = int32( 7)
+const DSL_ALG_BN_EPISSAMPLING         = int32( 8)
+const DSL_ALG_BN_LBP				  = int32( 9)
+const DSL_ALG_BN_LAURITZEN_OLD        = int32(10)
+const DSL_ALG_BN_RELEVANCEDECOMP      = int32(11)
+const DSL_ALG_BN_RELEVANCEDECOMP2     = int32(12)
+const DSL_ALG_HBN_HEPIS				  = int32(13)
+const DSL_ALG_HBN_HLW                 = int32(14)
+const DSL_ALG_HBN_HLBP				  = int32(15)
+const DSL_ALG_HBN_HLOGICSAMPLING	  = int32(16)
+
+# ID algorithms
+const DSL_ALG_ID_COOPERSOLVING        = int32(0)
+const DSL_ALG_ID_SHACHTER             = int32(1)
+
+set_default_BN_algorithm(net::Network,  algorithm::Integer) = ccall( (:network_SetDefaultBNAlgorithm,  LIB_SMILE), Void, (Ptr{Void},Int32), net.ptr, algorithm )
+set_default_ID_algorithm(net::Network,  algorithm::Integer) = ccall( (:network_SetDefaultIDAlgorithm,  LIB_SMILE), Void, (Ptr{Void},Int32), net.ptr, algorithm )
+set_default_HBN_algorithm(net::Network, algorithm::Integer) = ccall( (:network_SetDefaultHBNAlgorithm, LIB_SMILE), Void, (Ptr{Void},Int32), net.ptr, algorithm )
+get_default_BN_algorithm(net::Network)  = ccall( (:network_GetDefaultBNAlgorithm,  LIB_SMILE), Int32, (Ptr{Void},), net.ptr )
+get_default_ID_algorithm(net::Network)  = ccall( (:network_GetDefaultIDAlgorithm,  LIB_SMILE), Int32, (Ptr{Void},), net.ptr )
+get_default_HBN_algorithm(net::Network) = ccall( (:network_GetDefaultHBNAlgorithm, LIB_SMILE), Int32, (Ptr{Void},), net.ptr )
+
+# Inference
+update_beliefs(net::Network)         = ccall( (:network_UpdateBeliefs,        LIB_SMILE), Int32, (Ptr{Void},), net.ptr )
+invalidate_all_beliefs(net::Network) = ccall( (:network_InvalidateAllBeliefs, LIB_SMILE), Int32, (Ptr{Void},), net.ptr )
+call_ID_algorithm(net::Network)      = ccall( (:network_CallIDAlgorithm,      LIB_SMILE), Int32, (Ptr{Void},), net.ptr )
+call_BN_algorithm(net::Network)      = ccall( (:network_CallBNAlgorithm,      LIB_SMILE), Int32, (Ptr{Void},), net.ptr )
+call_Eq_algorithm(net::Network)      = ccall( (:network_CallEqAlgorithm,      LIB_SMILE), Int32, (Ptr{Void},), net.ptr )
+call_HBN_algorithm(net::Network)     = ccall( (:network_CallHBNAlgorithm,     LIB_SMILE), Int32, (Ptr{Void},), net.ptr )

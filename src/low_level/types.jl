@@ -34,7 +34,7 @@ immutable Header
 	ptr::Ptr{Void}
 end
 
-for str = ("DatasetParseParams", "DatasetWriteParams", "DoubleArray","IdArray","Network","Pattern",)
+for str = ("DatasetParseParams", "DatasetWriteParams", "DoubleArray", "IdArray","Network","Pattern",)
 	fname = symbol(str)
 	f_sym 
 
@@ -45,6 +45,7 @@ for str = ("DatasetParseParams", "DatasetWriteParams", "DoubleArray","IdArray","
 		type $fname
 			ptr::Ptr{Void}
 
+			($fname)(ptr::Ptr{Void}) = new(ptr)
 			function ($fname)()
 				ptr = ccall( ($op_cr, LIB_SMILE), Ptr{Void}, ())
 				smart_p = new(ptr)
@@ -76,4 +77,11 @@ type SysCoordinates
 		finalizer(smart_p, obj -> ccall( (:freeSysCoordinates, LIB_SMILE), Void, (Ptr{Void},), obj.ptr ))
 		smart_p
 	end
+	function SysCoordinates( nodeval::NodeValue )
+		ptr = ccall( (:createSysCoordinatesFromNodeValue, LIB_SMILE), Ptr{Void}, (Ptr{Void},), nodeval.ptr )
+		smart_p = new(ptr)
+		finalizer(smart_p, obj -> ccall( (:freeSysCoordinates, LIB_SMILE), Void, (Ptr{Void},), obj.ptr ))
+		smart_p
+	end
+	
 end
