@@ -35,6 +35,18 @@ extern "C" int 	        network_IsAcyclic( void * void_net );
 extern "C" int          network_LearnDynamicBayesianNetwork( void * void_net, void * void_dataset );
 extern "C" int          network_ReadFile(void * void_net, char *thisFile);
 extern "C" int          network_WriteFile(void * void_net, char *thisFile);
+extern "C" void         network_SetDefaultBNAlgorithm(void * void_net, int theAlgorithm);
+extern "C" void         network_SetDefaultIDAlgorithm(void * void_net, int theAlgorithm);
+extern "C" void         network_SetDefaultHBNAlgorithm(void * void_net, int theAlgorithm);
+extern "C" int          network_GetDefaultBNAlgorithm(void * void_net);
+extern "C" int          network_GetDefaultIDAlgorithm(void * void_net);
+extern "C" int          network_GetDefaultHBNAlgorithm(void * void_net);
+extern "C" int          network_UpdateBeliefs(void * void_net);
+extern "C" int          network_InvalidateAllBeliefs(void * void_net);
+extern "C" int          network_CallIDAlgorithm(void * void_net);
+extern "C" int          network_CallBNAlgorithm(void * void_net);
+extern "C" int          network_CallEqAlgorithm(void * void_net);
+extern "C" int          network_CallHBNAlgorithm(void * void_net);
 
 
 ///////////////////////////////////////
@@ -77,6 +89,7 @@ extern "C" void *       node_Value(void * void_node);
 ///////////////////////////////////////
 
 extern "C" void *       nodedef_GetMatrix( void * void_nodedef );
+extern "C" void *       nodedef_GetOutcomeNames( void * void_nodedef );
 extern "C" int          nodedef_SetDefinition( void * void_nodedef, void * void_doubleArray );
 extern "C" int          nodedef_SetNumberOfOutcomes(void * void_nodedef, void * void_stringArray);
 
@@ -86,6 +99,9 @@ extern "C" int          nodedef_SetNumberOfOutcomes(void * void_nodedef, void * 
 
 extern "C" void *       nodevalue_GetMatrix( void * void_nodeval );
 extern "C" int 			nodevalue_GetSize( void * void_nodeval );
+extern "C" int          nodevalue_GetEvidence( void * void_nodeval, double &evidence );
+extern "C" int          nodevalue_SetEvidence( void * void_nodeval, double evidence );
+extern "C" int          nodevalue_ClearEvidence(void * void_nodeval);
 
 ///////////////////////////////////////
 //             DSL_ID_ARRAY          //
@@ -97,6 +113,7 @@ extern "C" int          idarray_Add( void * void_idarr, char *thisString );
 ///////////////////////////////////////
 //           DSL_STRING_ARRAY        //
 ///////////////////////////////////////
+extern "C" int          stringarray_FindPosition( void * void_strarr, char *ofThisString );
 extern "C" void         stringarray_Flush( void * void_strarr );
 
 ///////////////////////////////////////
@@ -113,9 +130,18 @@ extern "C" int          doublearray_SetSize( void * void_dblarr, int thisSize );
 //         DSL_SYS_COORDINATES       //
 ///////////////////////////////////////
 extern "C" void *       createSysCoordinatesFromNodeDefinition( void * void_nodedef );
+extern "C" void *       createSysCoordinatesFromNodeValue(void * void_nodeval );
 extern "C" void         freeSysCoordinates( void * void_syscoord );
 extern "C" void         syscoord_Next( void * void_syscoord );
+extern "C" int          syscoord_GetIndex( void * void_syscoord, int index );
+extern "C" void         syscoord_SetIndex( void * void_syscoord, int index, int value );
+extern "C" double       syscoord_UncheckedValue(void * void_syscoord);
 extern "C" void         syscoord_SetUncheckedValue( void * void_syscoord, double val );
+extern "C" void         syscoord_GoToCurrentPosition( void * void_syscoord );
+extern "C" void         syscoord_LinkTo_DMatrix( void * void_syscoord, void * void_dmat );
+extern "C" void         syscoord_LinkTo_NodeDefinition( void * void_syscoord, void * void_nodedef );
+extern "C" void         syscoord_LinkTo_NodeValue( void * void_syscoord, void * void_nodeval );
+
 
 ///////////////////////////////////////
 //             DSL_DATASET           //

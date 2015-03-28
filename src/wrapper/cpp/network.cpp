@@ -127,3 +127,66 @@ int network_WriteFile(void * void_net, char *thisFile)
 	DSL_network * net = reinterpret_cast<DSL_network*>(void_net);
 	return net->WriteFile(thisFile);
 }
+
+void network_SetDefaultBNAlgorithm(void * void_net, int theAlgorithm)
+{
+	DSL_network * net = reinterpret_cast<DSL_network*>(void_net);
+	net->SetDefaultBNAlgorithm(theAlgorithm);
+}
+void network_SetDefaultIDAlgorithm(void * void_net, int theAlgorithm)
+{
+	DSL_network * net = reinterpret_cast<DSL_network*>(void_net);
+	net->SetDefaultIDAlgorithm(theAlgorithm);
+}
+void network_SetDefaultHBNAlgorithm(void * void_net, int theAlgorithm)
+{
+	DSL_network * net = reinterpret_cast<DSL_network*>(void_net);
+	net->SetDefaultHBNAlgorithm(theAlgorithm);
+}
+
+int network_GetDefaultBNAlgorithm(void * void_net)
+{
+	DSL_network * net = reinterpret_cast<DSL_network*>(void_net);
+	return net->GetDefaultBNAlgorithm();
+}
+int network_GetDefaultIDAlgorithm(void * void_net)
+{
+	DSL_network * net = reinterpret_cast<DSL_network*>(void_net);
+	return net->GetDefaultIDAlgorithm();
+}
+int network_GetDefaultHBNAlgorithm(void * void_net)
+{
+	DSL_network * net = reinterpret_cast<DSL_network*>(void_net);
+	return net->GetDefaultHBNAlgorithm();
+}
+
+int network_UpdateBeliefs(void * void_net)
+{
+	DSL_network * net = reinterpret_cast<DSL_network*>(void_net);
+	return net->UpdateBeliefs();
+}
+int network_InvalidateAllBeliefs(void * void_net)
+{
+	DSL_network * net = reinterpret_cast<DSL_network*>(void_net);
+	return net->InvalidateAllBeliefs();
+}
+int network_CallIDAlgorithm(void * void_net)
+{
+	DSL_network * net = reinterpret_cast<DSL_network*>(void_net);
+	return net->CallIDAlgorithm();
+}
+int network_CallBNAlgorithm(void * void_net)
+{
+	DSL_network * net = reinterpret_cast<DSL_network*>(void_net);
+	return net->CallBNAlgorithm();
+}
+int network_CallEqAlgorithm(void * void_net)
+{
+	DSL_network * net = reinterpret_cast<DSL_network*>(void_net);
+	return net->CallEqAlgorithm();
+}
+int network_CallHBNAlgorithm(void * void_net)
+{
+	DSL_network * net = reinterpret_cast<DSL_network*>(void_net);
+	return net->CallHBNAlgorithm();
+}

@@ -10,7 +10,7 @@
 //               LEARNING            //
 ///////////////////////////////////////
 
-int EDSL_K2      = 0;
+int   EDSL_K2    = 0;
 float EDSL_BDeu  = 1;
 
 bool dataset_learnBayesianSearch( void * void_dataset, void * void_net,

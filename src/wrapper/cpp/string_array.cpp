@@ -10,6 +10,12 @@
 //           DSL_STRING_ARRAY        //
 ///////////////////////////////////////
 
+int stringarray_FindPosition( void * void_strarr, char *ofThisString )
+{
+    DSL_stringArray * strarr = reinterpret_cast<DSL_stringArray*>(void_strarr);
+    return strarr->FindPosition(ofThisString);   
+}
+
 void stringarray_Flush( void * void_strarr )
 {
 	DSL_stringArray * strarr = reinterpret_cast<DSL_stringArray*>(void_strarr);

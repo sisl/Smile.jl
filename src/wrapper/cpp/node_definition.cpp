@@ -49,6 +49,14 @@ void * nodedef_GetMatrix( void * void_nodedef )
 	return retval;	
 }
 
+void * nodedef_GetOutcomeNames( void * void_nodedef )
+{
+	DSL_nodeDefinition * nodedef = reinterpret_cast<DSL_nodeDefinition*>(void_nodedef);
+	DSL_idArray * theNames = nodedef->GetOutcomesNames();
+	void * retval = theNames;
+	return retval;
+}
+
 int nodedef_SetDefinition( void * void_nodedef, void * void_doubleArray )
 {
 	DSL_nodeDefinition * nodedef = reinterpret_cast<DSL_nodeDefinition*>(void_nodedef);

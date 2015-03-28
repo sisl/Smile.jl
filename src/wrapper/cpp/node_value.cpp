@@ -23,3 +23,21 @@ int nodevalue_GetSize( void * void_nodeval )
 	DSL_nodeValue * nodeval = reinterpret_cast<DSL_nodeValue*>(void_nodeval);
 	return nodeval->GetSize();
 }
+
+int nodevalue_GetEvidence( void * void_nodeval, double &evidence )
+{
+    DSL_nodeValue * nodeval = reinterpret_cast<DSL_nodeValue*>(void_nodeval);
+    return nodeval->GetEvidence(evidence);
+}
+
+int nodevalue_SetEvidence( void * void_nodeval, double evidence )
+{
+    DSL_nodeValue * nodeval = reinterpret_cast<DSL_nodeValue*>(void_nodeval);
+    return nodeval->SetEvidence(evidence);
+}
+
+int nodevalue_ClearEvidence( void * void_nodeval )
+{
+    DSL_nodeValue * nodeval = reinterpret_cast<DSL_nodeValue*>(void_nodeval);
+    return nodeval->ClearEvidence();
+}
