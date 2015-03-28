@@ -29,6 +29,7 @@ else
 	include("low_level/pattern.jl")
 	include("low_level/node.jl")
 	include("low_level/nodedefinition.jl")
+	include("low_level/intarray.jl")
 	include("low_level/idarray.jl")
 	include("low_level/doublearray.jl")
 	include("low_level/syscoordinates.jl")
@@ -38,6 +39,7 @@ else
 	include("low_level/learning.jl")
 
 	include("high_level/learning.jl")
+	include("high_level/sampling.jl")
 end
 
 end # end module

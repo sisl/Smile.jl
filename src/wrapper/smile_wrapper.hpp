@@ -89,8 +89,10 @@ extern "C" void *       node_Value(void * void_node);
 ///////////////////////////////////////
 
 extern "C" void *       nodedef_GetMatrix( void * void_nodedef );
+extern "C" int          nodedef_GetType( void * void_nodedef );
 extern "C" void *       nodedef_GetOutcomeNames( void * void_nodedef );
 extern "C" int          nodedef_SetDefinition( void * void_nodedef, void * void_doubleArray );
+extern "C" int          nodedef_GetNumberOfOutcomes(void * void_nodedef);
 extern "C" int          nodedef_SetNumberOfOutcomes(void * void_nodedef, void * void_stringArray);
 
 ///////////////////////////////////////
@@ -98,10 +100,23 @@ extern "C" int          nodedef_SetNumberOfOutcomes(void * void_nodedef, void * 
 ///////////////////////////////////////
 
 extern "C" void *       nodevalue_GetMatrix( void * void_nodeval );
+extern "C" int          nodevalue_GetType( void * void_nodeval );
 extern "C" int 			nodevalue_GetSize( void * void_nodeval );
 extern "C" int          nodevalue_GetEvidence( void * void_nodeval, double &evidence );
 extern "C" int          nodevalue_SetEvidence( void * void_nodeval, double evidence );
 extern "C" int          nodevalue_ClearEvidence(void * void_nodeval);
+
+///////////////////////////////////////
+//             DSL_INT_ARRAY         //
+///////////////////////////////////////
+
+extern "C" void *       createIntArray();
+extern "C" void *       createIntArray_InitialSize(int initialSize);
+extern "C" void *       createIntArray_Copy(void * void_intarr);
+extern "C" void         freeIntArray( void * void_intarr );
+extern "C" int          intarray_GetSize( void * void_intarr );
+extern "C" int          intarray_GetIndex( void * void_intarr, int index );
+extern "C" void         intarray_SetIndex( void * void_intarr, int index, int value );
 
 ///////////////////////////////////////
 //             DSL_ID_ARRAY          //
@@ -245,6 +260,7 @@ extern "C" double       dmatrix_GetAtInd( void * void_dmat, int index );
 extern "C" int 			dmatrix_GetNumberOfDimensions( void * void_dmat );
 extern "C" int 			dmatrix_GetSize( void * void_dmat );
 extern "C" int          dmatrix_GetSizeOfDimension( void * void_dmat, int aDimension );
+extern "C" int          dmatrix_CoordinatesToIndex( void * void_dmat, void * void_intarr );
 
 ///////////////////////////////////////
 //             LEARNING              //

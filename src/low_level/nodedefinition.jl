@@ -54,21 +54,16 @@ function get_outcome_names(nodedef::NodeDefinition)
 	return IdArray(ptr)
 end
 
-function set_definition( nodedef::NodeDefinition, dblarr::DoubleArray )
+get_type(nodedef::NodeDefinition) =
+	ccall( (:nodedef_GetType, LIB_SMILE), Int32, (Ptr{Void},), nodedef.ptr)
 
-	err_int = ccall( (:nodedef_SetDefinition, LIB_SMILE), Int32, (Ptr{Void},Ptr{Void}), nodedef.ptr, dblarr.ptr )
-	if err_int < 0
-		error( "nodedef_SetDefinition: code: ", err_int )
-	end
-end
+set_definition( nodedef::NodeDefinition, dblarr::DoubleArray ) = 
+	ccall( (:nodedef_SetDefinition, LIB_SMILE), Int32, (Ptr{Void},Ptr{Void}), nodedef.ptr, dblarr.ptr )
 
-function set_number_of_outcomes( nodedef::NodeDefinition, idarr::IdArray )
-
-	err_int = ccall( (:nodedef_SetNumberOfOutcomes, LIB_SMILE), Int32, (Ptr{Void},Ptr{Void}), nodedef.ptr, idarr.ptr )
-	if err_int < 0
-		error( "nodedef_SetNumberOfOutcomes: code: ", err_int )
-	end
-end
+set_number_of_outcomes( nodedef::NodeDefinition, idarr::IdArray ) = 
+	ccall( (:nodedef_SetNumberOfOutcomes, LIB_SMILE), Int32, (Ptr{Void},Ptr{Void}), nodedef.ptr, idarr.ptr )
+get_number_of_outcomes(nodedef::NodeDefinition) =
+	ccall( (:nodedef_GetNumberOfOutcomes, LIB_SMILE), Int32, (Ptr{Void},), nodedef.ptr)
 
 function is_nodetype_id( typeID::Integer )
 	return typeID == DSL_CPT  || typeID == DSL_TRUTHTABLE ||

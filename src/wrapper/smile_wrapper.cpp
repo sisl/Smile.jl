@@ -13,6 +13,7 @@
 #include "cpp/node.cpp"
 #include "cpp/node_definition.cpp"
 #include "cpp/node_value.cpp"
+#include "cpp/int_array.cpp"
 #include "cpp/id_array.cpp"
 #include "cpp/string_array.cpp"
 #include "cpp/double_array.cpp"

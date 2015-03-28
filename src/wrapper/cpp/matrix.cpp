@@ -46,3 +46,10 @@ int dmatrix_GetSizeOfDimension( void * void_dmat, int aDimension )
 	DSL_Dmatrix * dmat = reinterpret_cast<DSL_Dmatrix*>(void_dmat);
 	return dmat->GetSizeOfDimension( aDimension );
 }
+
+int dmatrix_CoordinatesToIndex( void * void_dmat, void * void_intarr )
+{
+	DSL_Dmatrix * dmat = reinterpret_cast<DSL_Dmatrix*>(void_dmat);
+	DSL_intArray * arr = reinterpret_cast<DSL_intArray*>(void_intarr);
+	return dmat->CoordinatesToIndex(*arr);
+}

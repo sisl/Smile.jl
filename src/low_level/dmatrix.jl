@@ -10,9 +10,9 @@ function get_at{T <: Integer}( dmat::DMatrix, coord::Array{T,1} )
 end
 
 function get_at( dmat::DMatrix, ind::Integer )
-	# the order of the probabiliities is given by considering the state of 
+	# the order of the probabilities is given by considering the state of 
 	# the first parent as "most significant", then the second parent, then
-	# the third (and so on), and finall considering the coordinate of the
+	# the third (and so on), and finally considering the coordinate of the
 	# node itself as the least significant one.
 
 	# Example: consider a node C with two parents, A and B
@@ -46,3 +46,6 @@ function get_size_of_dimension( dmat::DMatrix, aDimension::Integer )
 	retval = ccall( (:dmatrix_GetSizeOfDimension, LIB_SMILE), Int32, (Ptr{Void},Int32), dmat.ptr, aDimension )
 	return retval
 end
+
+coordinates_to_index(dmat::DMatrix, arr::IntArray) =
+	ccall( (:dmatrix_CoordinatesToIndex, LIB_SMILE), Int32, (Ptr{Void},Ptr{Void}), dmat.ptr, arr.ptr )

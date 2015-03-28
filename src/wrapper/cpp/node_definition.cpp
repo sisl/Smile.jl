@@ -49,6 +49,13 @@ void * nodedef_GetMatrix( void * void_nodedef )
 	return retval;	
 }
 
+int nodedef_GetType( void * void_nodedef )
+{
+	DSL_nodeDefinition * nodedef = reinterpret_cast<DSL_nodeDefinition*>(void_nodedef);
+	return nodedef->GetType();
+}
+
+
 void * nodedef_GetOutcomeNames( void * void_nodedef )
 {
 	DSL_nodeDefinition * nodedef = reinterpret_cast<DSL_nodeDefinition*>(void_nodedef);
@@ -62,6 +69,12 @@ int nodedef_SetDefinition( void * void_nodedef, void * void_doubleArray )
 	DSL_nodeDefinition * nodedef = reinterpret_cast<DSL_nodeDefinition*>(void_nodedef);
 	DSL_doubleArray * dblarr = reinterpret_cast<DSL_doubleArray*>(void_doubleArray);
 	return nodedef->SetDefinition(*dblarr);
+}
+
+int nodedef_GetNumberOfOutcomes(void * void_nodedef)
+{
+	DSL_nodeDefinition * nodedef = reinterpret_cast<DSL_nodeDefinition*>(void_nodedef);
+	return nodedef->GetNumberOfOutcomes();	
 }
 
 int nodedef_SetNumberOfOutcomes(void * void_nodedef, void * void_stringArray)

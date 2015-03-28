@@ -1,13 +1,14 @@
-export  Dataset, DatasetVarInfo, DatasetParseParams, DatasetWriteParams
-export  DoubleArray
-export  Header
-export  IdArray
-export  Network
-export  Pattern
-export  Node
-export  NodeDefinition
-export  NodeValue
-export  SysCoordinates		
+export Dataset, DatasetVarInfo, DatasetParseParams, DatasetWriteParams
+export DoubleArray
+export Header
+export IdArray
+export Network
+export Pattern
+export Node
+export NodeDefinition
+export NodeValue
+export SysCoordinates
+export IntArray	
 		
 type Dataset
 	ptr::Ptr{Void}
@@ -83,5 +84,40 @@ type SysCoordinates
 		finalizer(smart_p, obj -> ccall( (:freeSysCoordinates, LIB_SMILE), Void, (Ptr{Void},), obj.ptr ))
 		smart_p
 	end
-	
+end
+
+type IntArray
+	ptr::Ptr{Void}
+
+	function IntArray()
+		ptr = ccall( (:createIntArray, LIB_SMILE), Ptr{Void}, () )
+		smart_p = new(ptr)
+		finalizer(smart_p, obj -> ccall( (:freeIntArray, LIB_SMILE), Void, (Ptr{Void},), obj.ptr ))
+		smart_p
+	end
+	function IntArray(initialSize::Integer)
+		ptr = ccall( (:createIntArray_InitialSize, LIB_SMILE), Ptr{Void}, (Cint,), initialSize )
+		smart_p = new(ptr)
+		finalizer(smart_p, obj -> ccall( (:freeIntArray, LIB_SMILE), Void, (Ptr{Void},), obj.ptr ))
+		smart_p
+	end
+	function IntArray(likeThisOne::IntArray)
+		ptr = ccall( (:createIntArray_Copy, LIB_SMILE), Ptr{Void}, (Ptr{Void},), likeThisOne.ptr )
+		smart_p = new(ptr)
+		finalizer(smart_p, obj -> ccall( (:freeIntArray, LIB_SMILE), Void, (Ptr{Void},), obj.ptr ))
+		smart_p
+	end
+	function IntArray{I<:Integer}(arr::Vector{I})
+	    n = length(arr)
+
+	    ptr = ccall( (:createIntArray_InitialSize, LIB_SMILE), Ptr{Void}, (Cint,), n )
+	    smart_p = new(ptr)
+	    finalizer(smart_p, obj -> ccall( (:freeIntArray, LIB_SMILE), Void, (Ptr{Void},), obj.ptr ))
+
+	    for i = 1 : n
+	        ccall( (:intarray_SetIndex, LIB_SMILE), Void, (Ptr{Void},Int32,Int32), ptr, i-1, arr[i] )
+	    end
+
+	    smart_p
+	end
 end
