@@ -1,6 +1,8 @@
 # This test follows the tutorial at:
 # https://dslpitt.org/genie/wiki/SMILE_Tutorial_1:_Creating_a_Bayesian_Network
 
+using Smile
+
 # create a net
 net = Network()
 
