@@ -1,17 +1,16 @@
 export
-		next,
         unchecked_value,
 		set_unchecked_value,
         go_to_current_position,
         link_to
 
-next( sysc::SysCoordinates ) =
+Base.next( sysc::SysCoordinates ) =
     ccall( (:syscoord_Next, LIB_SMILE), Void, (Ptr{Void},), sysc.ptr )
 
 Base.getindex(sysc::SysCoordinates, index::Integer) = 
-    ccall( (:syscoord_GetIndex, LIB_SMILE), Int32, (Ptr{Void},Int32), sysc.ptr, index )
+    ccall( (:syscoord_GetIndex, LIB_SMILE), Cint, (Ptr{Void},Cint), sysc.ptr, index )
 Base.setindex!(sysc::SysCoordinates, value::Integer, index::Integer) = 
-    ccall( (:syscoord_SetIndex, LIB_SMILE), Void, (Ptr{Void},Int32,Int32), sysc.ptr, index, value )
+    ccall( (:syscoord_SetIndex, LIB_SMILE), Void, (Ptr{Void},Cint,Cint), sysc.ptr, index, value )
 
 unchecked_value(sysc::SysCoordinates) = 
     ccall( (:syscoord_UncheckedValue, LIB_SMILE), Cdouble, (Ptr{Void},), sysc.ptr )

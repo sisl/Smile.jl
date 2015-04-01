@@ -190,3 +190,37 @@ int network_CallHBNAlgorithm(void * void_net)
 	DSL_network * net = reinterpret_cast<DSL_network*>(void_net);
 	return net->CallHBNAlgorithm();
 }
+
+int network_ClearAllEvidence(void * void_net)
+{
+	DSL_network * net = reinterpret_cast<DSL_network*>(void_net);
+	return net->ClearAllEvidence();
+}
+int network_ClearAllDecision(void * void_net)
+{
+	DSL_network * net = reinterpret_cast<DSL_network*>(void_net);
+	return net->ClearAllDecision();
+}
+int network_ClearAllPropagatedEvidence(void * void_net)
+{
+	DSL_network * net = reinterpret_cast<DSL_network*>(void_net);
+	return net->ClearAllPropagatedEvidence();
+}
+int network_IsThereAnyEvidence(void * void_net)
+{
+	DSL_network * net = reinterpret_cast<DSL_network*>(void_net);
+	return net->IsThereAnyEvidence();
+}
+int network_IsThereAnyDecision(void * void_net)
+{
+	DSL_network * net = reinterpret_cast<DSL_network*>(void_net);
+	return net->IsThereAnyDecision();
+}
+
+void * network_PartialOrdering(void * void_net)
+{
+	DSL_network * net = reinterpret_cast<DSL_network*>(void_net);
+	DSL_intArray arr = net->PartialOrdering();
+	void * retval = &arr;
+	return retval;
+}

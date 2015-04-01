@@ -27,7 +27,13 @@ export
 		call_ID_algorithm,
 		call_BN_algorithm,
 		call_Eq_algorithm,
-		call_HBN_algorithm
+		call_HBN_algorithm,
+		clear_all_evidence,
+		clear_all_decision,
+		clear_all_propagated_evidence,
+		is_there_any_evidence,
+		is_there_any_decision,
+		partial_ordering
 
 function add_arc( net::Network, theParent::Integer, theChild::Integer )
 	err_int = ccall( (:network_AddArc, LIB_SMILE), Int32, (Ptr{Void}, Int32, Int32), net.ptr, theParent, theChild)
@@ -175,3 +181,11 @@ call_ID_algorithm(net::Network)      = ccall( (:network_CallIDAlgorithm,      LI
 call_BN_algorithm(net::Network)      = ccall( (:network_CallBNAlgorithm,      LIB_SMILE), Int32, (Ptr{Void},), net.ptr )
 call_Eq_algorithm(net::Network)      = ccall( (:network_CallEqAlgorithm,      LIB_SMILE), Int32, (Ptr{Void},), net.ptr )
 call_HBN_algorithm(net::Network)     = ccall( (:network_CallHBNAlgorithm,     LIB_SMILE), Int32, (Ptr{Void},), net.ptr )
+
+clear_all_evidence(net::Network)            = ccall( (:network_ClearAllEvidence, LIB_SMILE), Int32, (Ptr{Void},), net.ptr )
+clear_all_decision(net::Network)            = ccall( (:network_ClearAllDecision, LIB_SMILE), Int32, (Ptr{Void},), net.ptr )
+clear_all_propagated_evidence(net::Network) = ccall( (:network_ClearAllPropagatedEvidence, LIB_SMILE), Int32, (Ptr{Void},), net.ptr )
+is_there_any_evidence(net::Network)         = ccall( (:network_IsThereAnyEvidence, LIB_SMILE), Int32, (Ptr{Void},), net.ptr )
+is_there_any_decision(net::Network)         = ccall( (:network_IsThereAnyDecision, LIB_SMILE), Int32, (Ptr{Void},), net.ptr )
+
+partial_ordering(net::Network) = IntArray(ccall( (:network_PartialOrdering, LIB_SMILE), Ptr{Void}, (Ptr{Void},), net.ptr ))

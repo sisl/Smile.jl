@@ -72,6 +72,7 @@ end
 type SysCoordinates
 	ptr::Ptr{Void}
 	
+	SysCoordinates( ptr::Ptr{Void} ) = new(ptr)
 	function SysCoordinates( nodedef::NodeDefinition )
 		ptr = ccall( (:createSysCoordinatesFromNodeDefinition, LIB_SMILE), Ptr{Void}, (Ptr{Void},), nodedef.ptr )
 		smart_p = new(ptr)
@@ -89,6 +90,7 @@ end
 type IntArray
 	ptr::Ptr{Void}
 
+	IntArray( ptr::Ptr{Void} ) = new(ptr)
 	function IntArray()
 		ptr = ccall( (:createIntArray, LIB_SMILE), Ptr{Void}, () )
 		smart_p = new(ptr)

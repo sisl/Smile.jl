@@ -47,6 +47,12 @@ extern "C" int          network_CallIDAlgorithm(void * void_net);
 extern "C" int          network_CallBNAlgorithm(void * void_net);
 extern "C" int          network_CallEqAlgorithm(void * void_net);
 extern "C" int          network_CallHBNAlgorithm(void * void_net);
+extern "C" int          network_ClearAllEvidence(void * void_net);
+extern "C" int          network_ClearAllDecision(void * void_net);
+extern "C" int          network_ClearAllPropagatedEvidence(void * void_net);
+extern "C" int          network_IsThereAnyEvidence(void * void_net);
+extern "C" int          network_IsThereAnyDecision(void * void_net);
+extern "C" void *       network_PartialOrdering(void * void_net);
 
 
 ///////////////////////////////////////
@@ -114,6 +120,7 @@ extern "C" void *       createIntArray();
 extern "C" void *       createIntArray_InitialSize(int initialSize);
 extern "C" void *       createIntArray_Copy(void * void_intarr);
 extern "C" void         freeIntArray( void * void_intarr );
+extern "C" int          intarray_NumItems( void * void_intarr );
 extern "C" int          intarray_GetSize( void * void_intarr );
 extern "C" int          intarray_GetIndex( void * void_intarr, int index );
 extern "C" void         intarray_SetIndex( void * void_intarr, int index, int value );
