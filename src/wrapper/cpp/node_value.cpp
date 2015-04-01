@@ -24,13 +24,25 @@ int nodevalue_GetSize( void * void_nodeval )
 	return nodeval->GetSize();
 }
 
-int nodevalue_GetEvidence( void * void_nodeval, double &evidence )
+int nodevalue_GetEvidence_Int( void * void_nodeval )
+{
+    DSL_nodeValue * nodeval = reinterpret_cast<DSL_nodeValue*>(void_nodeval);
+    return nodeval->GetEvidence();
+}
+
+int nodevalue_GetEvidence_Double( void * void_nodeval, double &evidence )
 {
     DSL_nodeValue * nodeval = reinterpret_cast<DSL_nodeValue*>(void_nodeval);
     return nodeval->GetEvidence(evidence);
 }
 
-int nodevalue_SetEvidence( void * void_nodeval, double evidence )
+int nodevalue_SetEvidence_Int( void * void_nodeval, int evidence )
+{
+    DSL_nodeValue * nodeval = reinterpret_cast<DSL_nodeValue*>(void_nodeval);
+    return nodeval->SetEvidence(evidence);
+}
+
+int nodevalue_SetEvidence_Double( void * void_nodeval, double evidence )
 {
     DSL_nodeValue * nodeval = reinterpret_cast<DSL_nodeValue*>(void_nodeval);
     return nodeval->SetEvidence(evidence);

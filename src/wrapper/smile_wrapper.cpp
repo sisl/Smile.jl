@@ -4,6 +4,7 @@
 #include "lib/smilearn.h"
 #include <cstring>
 #include <sstream>
+#include <stdio.h>
 #include <iostream>
 #include <vector>
 

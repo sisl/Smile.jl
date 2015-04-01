@@ -4,9 +4,6 @@ export
 
 function to_native_int_array(arr::IntArray)
     n = num_items(arr)
-    println("n: ", n)
-    return Cint[]
-
     retval = Array(Int32, n)
     for i = 1 : n
         retval[i] = arr[i-1]

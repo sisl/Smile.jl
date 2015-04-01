@@ -1,7 +1,8 @@
 export
 		get_matrix,
 		get_size,
-        get_evidence,
+        get_evidence_int,
+        get_evidence_double,
         set_evidence,
         clear_evidence
 
@@ -13,7 +14,9 @@ end
 get_size( nodeval::NodeValue ) = 
     ccall( (:nodevalue_GetSize, LIB_SMILE), Int32, (Ptr{Void},), nodeval.ptr )
 
-function get_evidence( nodeval::NodeValue )
+get_evidence_int( nodeval::NodeValue, val::FloatingPoint ) =
+    ccall( (:nodevalue_GetEvidence_Int, LIB_SMILE), Int32, (Ptr{Void},), nodeval.ptr )
+function get_evidence_double( nodeval::NodeValue )
     retval = 0.0::Cdouble
     err_int = ccall( (:nodevalue_GetEvidence, LIB_SMILE), Int32, (Ptr{Void},Ref{Cdouble}), nodeval.ptr, retval )
     if err_int < 0
@@ -21,7 +24,9 @@ function get_evidence( nodeval::NodeValue )
     end
     retval
 end
-set_evidence( nodeval::NodeValue, val::Real ) =
-    ccall( (:nodevalue_SetEvidence, LIB_SMILE), Int32, (Ptr{Void},Cdouble), nodeval.ptr, val )
+set_evidence( nodeval::NodeValue, val::FloatingPoint ) =
+    ccall( (:nodevalue_SetEvidence_Double, LIB_SMILE), Int32, (Ptr{Void},Cdouble), nodeval.ptr, val )
+set_evidence( nodeval::NodeValue, val::Integer ) =
+    ccall( (:nodevalue_SetEvidence_Int, LIB_SMILE), Int32, (Ptr{Void},Cint), nodeval.ptr, val )
 clear_evidence( nodeval::NodeValue ) =
     ccall( (:nodevalue_ClearEvidence, LIB_SMILE), Int32, (Ptr{Void},), nodeval.ptr )

@@ -108,8 +108,10 @@ extern "C" int          nodedef_SetNumberOfOutcomes(void * void_nodedef, void * 
 extern "C" void *       nodevalue_GetMatrix( void * void_nodeval );
 extern "C" int          nodevalue_GetType( void * void_nodeval );
 extern "C" int 			nodevalue_GetSize( void * void_nodeval );
-extern "C" int          nodevalue_GetEvidence( void * void_nodeval, double &evidence );
-extern "C" int          nodevalue_SetEvidence( void * void_nodeval, double evidence );
+extern "C" int          nodevalue_GetEvidence_Double( void * void_nodeval, double &evidence );
+extern "C" int          nodevalue_GetEvidence_Int( void * void_nodeval );
+extern "C" int          nodevalue_SetEvidence_Double( void * void_nodeval, double evidence );
+extern "C" int          nodevalue_SetEvidence_Int( void * void_nodeval, int evidence );
 extern "C" int          nodevalue_ClearEvidence(void * void_nodeval);
 
 ///////////////////////////////////////

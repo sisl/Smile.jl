@@ -3,8 +3,12 @@ export
         normalize!,
         draw_from_p_vec,
         get_cpt_probability_vec_noevidence,
-        condition_on_beliefs!
-       
+        condition_on_beliefs!,
+        monte_carlo_probability_estimate,
+        does_assignment_match_evidence,
+        rejection_sample,
+        marginal_probability,
+        marginal_logprob
 
 
 # export logpdf
@@ -65,7 +69,6 @@ function get_cpt_probability_vec_noevidence(net::Network, nodeid::Cint, assignme
     retval
 end
 
-<<<<<<< HEAD
 function condition_on_beliefs!(net::Network, assignment::Dict{Cint, Cint})
 
     clear_all_evidence(net)
@@ -94,19 +97,15 @@ end
 function Base.rand!(net::Network, assignment::Dict{Cint, Cint})
 
     ordering = to_native_int_array(partial_ordering(net)::IntArray)
-    ordering = [int32(0),int32(1)]
 
-    set_default_BN_algorithm(net, DSL_ALG_BN_LAURITZEN)
+    condition_on_beliefs!(net, assignment)
 
     for nodeid in ordering
         if !haskey(assignment, nodeid)
             
-            condition_on_beliefs!(net, assignment)
-
             nodeval = value(get_node(net, nodeid))
             thecoordinates = SysCoordinates(nodeval)
             nstates = get_size(nodeval)
-            println("nstates: ", nstates)
 
             thecoordinates[0] = 0
             go_to_current_position(thecoordinates)
@@ -119,17 +118,88 @@ function Base.rand!(net::Network, assignment::Dict{Cint, Cint})
                 end
             end
             normalize!(p)
-            println("p: ", p)
 
             newstate = draw_from_p_vec(p)
-            println("newstate: ", newstate)
             assignment[nodeid] = newstate
+            set_evidence(value(get_node(net, nodeid)), newstate)
+            update_beliefs(net)
         end
     end
     assignment
 end
+# function Base.rand!(net::Network, assignment::Dict{Cint, Cint};
+#     BN_algorithm :: Cint = DSL_ALG_BN_LAURITZEN
+#     )
 
-# logpdf(net, assignment) (marginal probability)
+#     ordering = to_native_int_array(partial_ordering(net)::IntArray)
+#     ordering = [int32(0),int32(1)]
+
+#     set_default_BN_algorithm(net, BN_algorithm)
+
+#     for nodeid in ordering
+#         if !haskey(assignment, nodeid)
+            
+#             condition_on_beliefs!(net, assignment)
+
+#             nodeval = value(get_node(net, nodeid))
+#             thecoordinates = SysCoordinates(nodeval)
+#             nstates = get_size(nodeval)
+
+#             thecoordinates[0] = 0
+#             go_to_current_position(thecoordinates)
+
+#             p = Array(Float64, nstates)
+#             for i = 1 : nstates
+#                 p[i] = unchecked_value(thecoordinates)
+#                 if i != nstates
+#                     next(thecoordinates)
+#                 end
+#             end
+#             normalize!(p)
+
+#             newstate = draw_from_p_vec(p)
+#             assignment[nodeid] = newstate
+#         end
+#     end
+#     assignment
+# end
+
+function marginal_probability(net, target::Dict{Cint, Cint}, evidence::Dict{Cint, Cint})
+    # P(target ∣ evidence)
+
+    retval = 1.0
+
+    condition_on_beliefs!(net, evidence)
+
+    for (nodeid, val) in target
+        nodeval = value(get_node(net, nodeid))
+        thecoordinates = SysCoordinates(nodeval)
+        nstates = get_size(nodeval)
+        thecoordinates[0] = val
+        go_to_current_position(thecoordinates)
+        retval *= unchecked_value(thecoordinates) # NOTE(tim): this assumes it has been normalized
+    end
+
+    retval
+end
+function marginal_logprob(net, target::Dict{Cint, Cint}, evidence::Dict{Cint, Cint})
+    # P(target ∣ evidence)
+
+    retval = 0.0
+
+    condition_on_beliefs!(net, evidence)
+
+    for (nodeid, val) in target
+        nodeval = value(get_node(net, nodeid))
+        thecoordinates = SysCoordinates(nodeval)
+        nstates = get_size(nodeval)
+        thecoordinates[0] = val
+        go_to_current_position(thecoordinates)
+        retval += log(unchecked_value(thecoordinates)) # NOTE(tim): this assumes it has been normalized
+    end
+
+    retval
+end
 
 function does_assignment_match_evidence(assignment::Dict{Cint, Cint}, evidence::Dict{Cint, Cint})
     for (k,v) in evidence
@@ -148,7 +218,7 @@ function rejection_sample(net::Network, evidence::Dict{Cint, Cint})
     assignment
 end
 
-function monte_carlo_probability_estimate(net::Network, evidence::Dict{Cint, Cint}, nsamples::Int)
+function monte_carlo_probability_estimate(net::Network, evidence::Dict{Cint, Cint}, nsamples::Integer)
 
     @assert(nsamples > 0)
 
@@ -156,8 +226,25 @@ function monte_carlo_probability_estimate(net::Network, evidence::Dict{Cint, Cin
 
     for i = 1 : nsamples
         assignment = rand(net)
-        count += does_assignment_match_evidence(assignment, evidence)
+        counts += does_assignment_match_evidence(assignment, evidence)
     end
 
-    count / nsamples
+    counts / nsamples
+end
+function monte_carlo_probability_estimate(net::Network, target::Dict{Cint,Cint}, evidence::Dict{Cint, Cint}, nsamples::Integer)
+
+    @assert(nsamples > 0)
+
+    counts_evidence = 0
+    counts_target   = 0
+
+    for i = 1 : nsamples
+        assignment = rand(net)
+        if does_assignment_match_evidence(assignment, evidence)
+            counts_evidence += 1
+            counts_target += does_assignment_match_evidence(assignment, target)
+        end
+    end
+
+    counts_target / counts_evidence
 end

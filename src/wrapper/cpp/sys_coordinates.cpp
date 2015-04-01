@@ -40,13 +40,13 @@ void syscoord_Next( void * void_syscoord )
 int syscoord_GetIndex( void * void_syscoord, int index )
 {
 	DSL_sysCoordinates * syscoord = reinterpret_cast<DSL_sysCoordinates*>(void_syscoord);
-	return (*syscoord)[index];
+	DSL_sysCoordinates syscoord2 = (*syscoord);
+	return syscoord2[index];
 }
 void syscoord_SetIndex( void * void_syscoord, int index, int value )
 {
 	DSL_sysCoordinates * syscoord = reinterpret_cast<DSL_sysCoordinates*>(void_syscoord);
-	DSL_sysCoordinates obj = *syscoord;
-	obj[index] = value;
+	(*syscoord)[index] = value;
 }
  
 double syscoord_UncheckedValue(void * void_syscoord)

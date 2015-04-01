@@ -49,6 +49,17 @@ update_beliefs(net)
 
 # get the result value
 
+# DSL_sysCoordinates theCoordinates(*theNet.GetNode(forecast)->Value());
+# DSL_idArray *theNames;
+# theNames = theNet.GetNode(forecast)->Definition()->GetOutcomesNames();  
+# int moderateIndex = theNames->FindPosition("Moderate"); // should be 1
+# theCoordinates[0] = moderateIndex;
+# theCoordinates.GoToCurrentPosition();
+
+# // get P("Forecast" = Moderate)
+# double P_ForecastIsModerate = theCoordinates.UncheckedValue();
+# printf("P(\"Forecast\" = Moderate) = %f\n",P_ForecastIsModerate);
+
 thecoordinates = SysCoordinates(value(get_node(net, forecast)))
 thenames = get_outcome_names(definition(get_node(net, forecast)))
 moderateIndex = find_position(thenames, "Moderate")
@@ -60,6 +71,7 @@ go_to_current_position(thecoordinates)
 # get P("Forecast" = Moderate)
 P_ForecastIsModerate = unchecked_value(thecoordinates)
 @printf("P(\"Forecast\" = Moderate) = %f\n", P_ForecastIsModerate)
+@assert(isapprox(P_ForecastIsModerate, 0.32))
 
 # now we want to compute P("Success" = Failure | "Forecast" = Good)
 # first, introduce the evidence
@@ -78,6 +90,7 @@ go_to_current_position(thecoordinates)
 P_SuccIsFailGivenForeIsGood = unchecked_value(thecoordinates)
 @printf("P(\"Success\" = Failure | \"Forecast\" = Good) = ")
 @printf("%f\n",P_SuccIsFailGivenForeIsGood)
+@assert(isapprox(P_SuccIsFailGivenForeIsGood, 0.5))
 
 # now we want to compute P("Success" = Success | "Forecast" = Poor)
 # first, clear the evidence in node "Forecast"
@@ -97,3 +110,4 @@ go_to_current_position(thecoordinates)
 P_SuccIsSuccGivenForeIsPoor = unchecked_value(thecoordinates)
 @printf("P(\"Success\" = Success | \"Forecast\" = Poor) = ")
 @printf("%f\n", P_SuccIsSuccGivenForeIsPoor)
+@assert(abs(P_SuccIsSuccGivenForeIsPoor - 0.0769) < 1e-2)

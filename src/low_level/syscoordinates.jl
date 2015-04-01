@@ -18,7 +18,7 @@ unchecked_value(sysc::SysCoordinates) =
 set_unchecked_value( sysc::SysCoordinates, val::Real ) = 
 	ccall( (:syscoord_SetUncheckedValue, LIB_SMILE), Void, (Ptr{Void},Float64), sysc.ptr, val )	
 
-go_to_current_position(sysc::SysCoordinates) = 
+go_to_current_position(sysc::SysCoordinates) =
     ccall( (:syscoord_GoToCurrentPosition, LIB_SMILE), Void, (Ptr{Void},), sysc.ptr)
 
 link_to(sysc::SysCoordinates, dmat::DMatrix) = 

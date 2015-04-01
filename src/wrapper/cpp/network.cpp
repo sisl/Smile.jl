@@ -6,6 +6,8 @@
 // date: October 2014
 // Stanford Intelligence Systems Laboratory
 
+// #include <stdio.h>
+
 ///////////////////////////////////////
 //            DSL_NETWORK            //
 ///////////////////////////////////////
@@ -221,6 +223,7 @@ void * network_PartialOrdering(void * void_net)
 {
 	DSL_network * net = reinterpret_cast<DSL_network*>(void_net);
 	DSL_intArray arr = net->PartialOrdering();
-	void * retval = &arr;
+	DSL_intArray * arr2 = new DSL_intArray(arr);
+	void * retval = arr2;
 	return retval;
 }
