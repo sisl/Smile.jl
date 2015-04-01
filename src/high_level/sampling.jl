@@ -65,6 +65,7 @@ function get_cpt_probability_vec_noevidence(net::Network, nodeid::Cint, assignme
     retval
 end
 
+<<<<<<< HEAD
 function condition_on_beliefs!(net::Network, assignment::Dict{Cint, Cint})
 
     clear_all_evidence(net)
@@ -129,3 +130,34 @@ function Base.rand!(net::Network, assignment::Dict{Cint, Cint})
 end
 
 # logpdf(net, assignment) (marginal probability)
+
+function does_assignment_match_evidence(assignment::Dict{Cint, Cint}, evidence::Dict{Cint, Cint})
+    for (k,v) in evidence
+        if assignment[k] != v
+            return false
+        end
+    end
+    return true
+end
+
+function rejection_sample(net::Network, evidence::Dict{Cint, Cint})
+    assignment = rand(net)
+    while !does_assignment_match_evidence(assignment, evidence)
+        assignment = rand(net)
+    end
+    assignment
+end
+
+function monte_carlo_probability_estimate(net::Network, evidence::Dict{Cint, Cint}, nsamples::Int)
+
+    @assert(nsamples > 0)
+
+    counts = 0
+
+    for i = 1 : nsamples
+        assignment = rand(net)
+        count += does_assignment_match_evidence(assignment, evidence)
+    end
+
+    count / nsamples
+end
