@@ -61,7 +61,7 @@ function get_cpt_probability_vec(net::Network, nodeid::Int32, assignment::Dict{I
     retval
 end
 
-function Base.rand(net::Network)
+function Base.rand(net::Network; )
 
     # returns a Dict{Int32, Int32} of NodeIndex -> Value
     assignment = Dict{Int32, Int32}()
@@ -80,3 +80,34 @@ end
 # end
 
 # logpdf(net, assignment) (marginal probability)
+
+function does_assignment_match_evidence(assignment::Dict{Cint, Cint}, evidence::Dict{Cint, Cint})
+    for (k,v) in evidence
+        if assignment[k] != v
+            return false
+        end
+    end
+    return true
+end
+
+function rejection_sample(net::Network, evidence::Dict{Cint, Cint})
+    assignment = rand(net)
+    while !does_assignment_match_evidence(assignment, evidence)
+        assignment = rand(net)
+    end
+    assignment
+end
+
+function monte_carlo_probability_estimate(net::Network, evidence::Dict{Cint, Cint}, nsamples::Int)
+
+    @assert(nsamples > 0)
+
+    counts = 0
+
+    for i = 1 : nsamples
+        assignment = rand(net)
+        count += does_assignment_match_evidence(assignment, evidence)
+    end
+
+    count / nsamples
+end
