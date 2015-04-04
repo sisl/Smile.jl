@@ -69,4 +69,31 @@ let
     @test(isapprox(marginal_probability(net, [forecast=>int32(1)], [success=>int32(1)]), 0.3))
     @test(isapprox(marginal_probability(net, [forecast=>int32(2)], [success=>int32(1)]), 0.6))
 
+    @test(isapprox(probability(net, [success=>int32(0), forecast=>int32(0)]), 0.2*0.4))
+    @test(isapprox(probability(net, [success=>int32(0), forecast=>int32(1)]), 0.2*0.4))
+    @test(isapprox(probability(net, [success=>int32(0), forecast=>int32(2)]), 0.2*0.2))
+    @test(isapprox(probability(net, [success=>int32(1), forecast=>int32(0)]), 0.8*0.1))
+    @test(isapprox(probability(net, [success=>int32(1), forecast=>int32(1)]), 0.8*0.3))
+    @test(isapprox(probability(net, [success=>int32(1), forecast=>int32(2)]), 0.8*0.6))
+
+    @test(isapprox(probability(net, [success=>int32(0)]), 0.2))
+    @test(isapprox(probability(net, [success=>int32(1)]), 0.8))
+
+    @test(isapprox(probability(net, [forecast=>int32(0)]), 0.16))
+    @test(isapprox(probability(net, [forecast=>int32(1)]), 0.32))
+    @test(isapprox(probability(net, [forecast=>int32(2)]), 0.52))
+
+    @test(isapprox(logprob(net, [success=>int32(0), forecast=>int32(0)]), log(0.2*0.4)))
+    @test(isapprox(logprob(net, [success=>int32(0), forecast=>int32(1)]), log(0.2*0.4)))
+    @test(isapprox(logprob(net, [success=>int32(0), forecast=>int32(2)]), log(0.2*0.2)))
+    @test(isapprox(logprob(net, [success=>int32(1), forecast=>int32(0)]), log(0.8*0.1)))
+    @test(isapprox(logprob(net, [success=>int32(1), forecast=>int32(1)]), log(0.8*0.3)))
+    @test(isapprox(logprob(net, [success=>int32(1), forecast=>int32(2)]), log(0.8*0.6)))
+
+    @test(isapprox(logprob(net, [success=>int32(0)]), log(0.2)))
+    @test(isapprox(logprob(net, [success=>int32(1)]), log(0.8)))
+
+    @test(isapprox(logprob(net, [forecast=>int32(0)]), log(0.16)))
+    @test(isapprox(logprob(net, [forecast=>int32(1)]), log(0.32)))
+    @test(isapprox(logprob(net, [forecast=>int32(2)]), log(0.52)))
 end
