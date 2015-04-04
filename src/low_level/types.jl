@@ -90,7 +90,11 @@ end
 type IntArray
 	ptr::Ptr{Void}
 
-	IntArray( ptr::Ptr{Void} ) = new(ptr)
+	function IntArray( ptr::Ptr{Void} )
+		smart_p = new(ptr)
+		finalizer(smart_p, obj -> ccall( (:freeIntArray, LIB_SMILE), Void, (Ptr{Void},), obj.ptr ))
+		smart_p
+	end
 	function IntArray()
 		ptr = ccall( (:createIntArray, LIB_SMILE), Ptr{Void}, () )
 		smart_p = new(ptr)

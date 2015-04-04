@@ -2,6 +2,7 @@ export
         unchecked_value,
 		set_unchecked_value,
         go_to_current_position,
+        go_to,
         link_to
 
 Base.next( sysc::SysCoordinates ) =
@@ -18,6 +19,8 @@ unchecked_value(sysc::SysCoordinates) =
 set_unchecked_value( sysc::SysCoordinates, val::Real ) = 
 	ccall( (:syscoord_SetUncheckedValue, LIB_SMILE), Void, (Ptr{Void},Float64), sysc.ptr, val )	
 
+go_to(sysc::SysCoordinates, theIndex::Integer) =
+    ccall( (:syscoord_GoTo, LIB_SMILE), Cint, (Ptr{Void},Cint), sysc.ptr, theIndex)
 go_to_current_position(sysc::SysCoordinates) =
     ccall( (:syscoord_GoToCurrentPosition, LIB_SMILE), Void, (Ptr{Void},), sysc.ptr)
 

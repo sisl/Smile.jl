@@ -28,6 +28,7 @@ extern "C" int          network_AddNode(void * void_net, int thisType, char *thi
 extern "C" void         network_GetChildren(void * void_net, int ofThisNode, int * childHandles, unsigned * len);
 extern "C" int 			network_GetFirstNode( void * void_net );
 extern "C" void         network_GetParents(void * void_net, int ofThisNode, int * parentHandles, unsigned  * len);
+extern "C" int          network_FindNode(void * void_net, char *withThisId);
 extern "C" int          network_GetNextNode( void * void_net, int ofThisNode );
 extern "C" void *       network_GetNode(void * void_net, int theNode);
 extern "C" int 			network_GetNumberOfNodes( void * void_net );
@@ -99,7 +100,8 @@ extern "C" int          nodedef_GetType( void * void_nodedef );
 extern "C" void *       nodedef_GetOutcomeNames( void * void_nodedef );
 extern "C" int          nodedef_SetDefinition( void * void_nodedef, void * void_doubleArray );
 extern "C" int          nodedef_GetNumberOfOutcomes(void * void_nodedef);
-extern "C" int          nodedef_SetNumberOfOutcomes(void * void_nodedef, void * void_stringArray);
+extern "C" int          nodedef_SetNumberOfOutcomes_Names(void * void_nodedef, void * void_stringArray);
+extern "C" int          nodedef_SetNumberOfOutcomes_Int(void * void_nodedef, int outcomeNumber);
 
 ///////////////////////////////////////
 //           DSL_NODE_VALUE          //
@@ -161,6 +163,7 @@ extern "C" int          syscoord_GetIndex( void * void_syscoord, int index );
 extern "C" void         syscoord_SetIndex( void * void_syscoord, int index, int value );
 extern "C" double       syscoord_UncheckedValue(void * void_syscoord);
 extern "C" void         syscoord_SetUncheckedValue( void * void_syscoord, double val );
+extern "C" int          syscoord_GoTo( void * void_syscoord, int theIndex );
 extern "C" void         syscoord_GoToCurrentPosition( void * void_syscoord );
 extern "C" void         syscoord_LinkTo_DMatrix( void * void_syscoord, void * void_dmat );
 extern "C" void         syscoord_LinkTo_NodeDefinition( void * void_syscoord, void * void_nodedef );
@@ -266,6 +269,7 @@ extern "C" void         datasetwriteparams_setFloatFormat( void * void_datasetpp
 
 extern "C" double       dmatrix_GetAtCoord( void * void_dmat, int * theCoordinates, unsigned len );
 extern "C" double       dmatrix_GetAtInd( void * void_dmat, int index );
+extern "C" void         dmatrix_SetAtInd( void * void_dmat, int index, double value );
 extern "C" int 			dmatrix_GetNumberOfDimensions( void * void_dmat );
 extern "C" int 			dmatrix_GetSize( void * void_dmat );
 extern "C" int          dmatrix_GetSizeOfDimension( void * void_dmat, int aDimension );

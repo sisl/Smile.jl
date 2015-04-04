@@ -7,6 +7,9 @@ export
         monte_carlo_probability_estimate,
         does_assignment_match_evidence,
         rejection_sample,
+        probability,
+        probabilities,
+        logprob,
         marginal_probability,
         marginal_logprob
 
@@ -62,7 +65,7 @@ function get_cpt_probability_vec_noevidence(net::Network, nodeid::Cint, assignme
     ind = coordinates_to_index(cpt, coordinates)
     retval = Array(Float64, n)
     for i = 1 : n        
-        retval[i] = get_at(cpt, ind)
+        retval[i] = cpt[ind]
         ind += 1
     end
 
@@ -81,12 +84,13 @@ function condition_on_beliefs!(net::Network, assignment::Dict{Cint, Cint})
     net
 end
 
-function Base.rand(net::Network)
+function Base.rand(net::Network; 
+    ordering::Vector{Int} = to_native_int_array(partial_ordering(net)::IntArray)
+    )
 
     # returns a Dict{Cint, Cint} of NodeIndex -> Value
 
     assignment = Dict{Cint, Cint}()
-    ordering = to_native_int_array(partial_ordering(net)::IntArray)
     for nodeid in ordering
         p = normalize!(get_cpt_probability_vec_noevidence(net, nodeid, assignment))
         assignment[nodeid] = draw_from_p_vec(p)
@@ -94,9 +98,9 @@ function Base.rand(net::Network)
     assignment
 end
 
-function Base.rand!(net::Network, assignment::Dict{Cint, Cint})
-
-    ordering = to_native_int_array(partial_ordering(net)::IntArray)
+function Base.rand!(net::Network, assignment::Dict{Cint, Cint};
+    ordering::Vector{Int} = to_native_int_array(partial_ordering(net)::IntArray)
+    )
 
     condition_on_beliefs!(net, assignment)
 
@@ -127,44 +131,96 @@ function Base.rand!(net::Network, assignment::Dict{Cint, Cint})
     end
     assignment
 end
-# function Base.rand!(net::Network, assignment::Dict{Cint, Cint};
-#     BN_algorithm :: Cint = DSL_ALG_BN_LAURITZEN
-#     )
 
-#     ordering = to_native_int_array(partial_ordering(net)::IntArray)
-#     ordering = [int32(0),int32(1)]
+function probability(net, assignment::Dict{Cint, Cint};
+    ordering::Vector{Int} = to_native_int_array(partial_ordering(net)::IntArray)
+    )
+    # P(assignment)
 
-#     set_default_BN_algorithm(net, BN_algorithm)
+    retval = 1.0
 
-#     for nodeid in ordering
-#         if !haskey(assignment, nodeid)
-            
-#             condition_on_beliefs!(net, assignment)
+    clear_all_evidence(net)
+    update_beliefs(net)
 
-#             nodeval = value(get_node(net, nodeid))
-#             thecoordinates = SysCoordinates(nodeval)
-#             nstates = get_size(nodeval)
+    for nodeid in ordering
+        if haskey(assignment, nodeid)
+            val = assignment[nodeid]
+            nodeval = value(get_node(net, nodeid))
+            thecoordinates = SysCoordinates(nodeval)
+            thecoordinates[0] = val
+            go_to_current_position(thecoordinates)
+            retval *= unchecked_value(thecoordinates) # NOTE(tim): this assumes it has been normalized
 
-#             thecoordinates[0] = 0
-#             go_to_current_position(thecoordinates)
+            if isapprox(retval, 0.0)
+                return 0.0
+            end
 
-#             p = Array(Float64, nstates)
-#             for i = 1 : nstates
-#                 p[i] = unchecked_value(thecoordinates)
-#                 if i != nstates
-#                     next(thecoordinates)
-#                 end
-#             end
-#             normalize!(p)
+            set_evidence(value(get_node(net, nodeid)), val)
+            update_beliefs(net)
+        end
+    end
 
-#             newstate = draw_from_p_vec(p)
-#             assignment[nodeid] = newstate
-#         end
-#     end
-#     assignment
-# end
+    retval
+end
+function probabilities(net, assignment::Dict{Cint, Cint};
+    ordering::Vector{Int} = to_native_int_array(partial_ordering(net)::IntArray)
+    )
+    # P(assignment)
 
-function marginal_probability(net, target::Dict{Cint, Cint}, evidence::Dict{Cint, Cint})
+    retval = Dict{Cint, Float64}()
+
+    clear_all_evidence(net)
+    update_beliefs(net)
+
+    for nodeid in ordering
+        if haskey(assignment, nodeid)
+            val = assignment[nodeid]
+            nodeval = value(get_node(net, nodeid))
+            thecoordinates = SysCoordinates(nodeval)
+            thecoordinates[0] = val
+            go_to_current_position(thecoordinates)
+            retval[nodeid] = unchecked_value(thecoordinates) # NOTE(tim): this assumes it has been normalized
+
+            set_evidence(nodeval, val)
+            update_beliefs(net)
+        end
+    end
+
+    retval
+end
+function logprob(net, assignment::Dict{Cint, Cint};
+    ordering::Vector{Int} = to_native_int_array(partial_ordering(net)::IntArray)
+    )
+    # P(assignment)
+
+    retval = 0.0
+
+    clear_all_evidence(net)
+    update_beliefs(net)
+
+    for nodeid in ordering
+        if haskey(assignment, nodeid)
+            val = assignment[nodeid]
+            nodeval = value(get_node(net, nodeid))
+            thecoordinates = SysCoordinates(nodeval)
+            thecoordinates[0] = val
+            go_to_current_position(thecoordinates)
+            retval += log(unchecked_value(thecoordinates)) # NOTE(tim): this assumes it has been normalized
+
+            if isinf(retval)
+                return -Inf
+            end
+
+            set_evidence(nodeval, val)
+            update_beliefs(net)
+        end
+    end
+
+    retval
+end
+
+
+function marginal_probability(net, target::Dict{Cint, Cint}, evidence::Dict{Cint, Cint}=Dict{Cint, Cint}())
     # P(target ∣ evidence)
 
     retval = 1.0
@@ -178,11 +234,14 @@ function marginal_probability(net, target::Dict{Cint, Cint}, evidence::Dict{Cint
         thecoordinates[0] = val
         go_to_current_position(thecoordinates)
         retval *= unchecked_value(thecoordinates) # NOTE(tim): this assumes it has been normalized
+        if isapprox(retval, 0.0)
+            break
+        end
     end
 
     retval
 end
-function marginal_logprob(net, target::Dict{Cint, Cint}, evidence::Dict{Cint, Cint})
+function marginal_logprob(net, target::Dict{Cint, Cint}, evidence::Dict{Cint, Cint}=Dict{Cint, Cint}())
     # P(target ∣ evidence)
 
     retval = 0.0
@@ -196,6 +255,9 @@ function marginal_logprob(net, target::Dict{Cint, Cint}, evidence::Dict{Cint, Ci
         thecoordinates[0] = val
         go_to_current_position(thecoordinates)
         retval += log(unchecked_value(thecoordinates)) # NOTE(tim): this assumes it has been normalized
+        if isinf(retval)
+            break
+        end
     end
 
     retval

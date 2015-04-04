@@ -8,6 +8,7 @@ export
 		get_node,
 		get_number_of_nodes,
 		get_parents,
+		find_node,
 		is_acyclic,
 		read_file,
 		write_file,
@@ -124,6 +125,9 @@ function get_parents( net::Network, ofThisNode::Integer, len_start = 10 )
 	end
 	return arr[1:len_end]
 end
+
+find_node( net::Network, withThisID::String ) =
+	ccall( (:network_FindNode, LIB_SMILE), Int32, (Ptr{Void},Ptr{Uint8}), net.ptr, bytestring(withThisID) )
 
 function is_acyclic( net::Network )
 	retval = ccall( (:network_IsAcyclic, LIB_SMILE), Int32, (Ptr{Void},), net.ptr )

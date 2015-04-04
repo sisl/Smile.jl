@@ -61,6 +61,12 @@ void syscoord_SetUncheckedValue( void * void_syscoord, double val )
 	syscoord->UncheckedValue() = val;
 }
 
+int syscoord_GoTo( void * void_syscoord, int theIndex )
+{
+	DSL_sysCoordinates * syscoord = reinterpret_cast<DSL_sysCoordinates*>(void_syscoord);
+	return syscoord->GoTo(theIndex);
+}
+
 void syscoord_GoToCurrentPosition( void * void_syscoord )
 {
 	DSL_sysCoordinates * syscoord = reinterpret_cast<DSL_sysCoordinates*>(void_syscoord);

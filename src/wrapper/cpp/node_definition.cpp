@@ -77,9 +77,15 @@ int nodedef_GetNumberOfOutcomes(void * void_nodedef)
 	return nodedef->GetNumberOfOutcomes();	
 }
 
-int nodedef_SetNumberOfOutcomes(void * void_nodedef, void * void_stringArray)
+int nodedef_SetNumberOfOutcomes_Names(void * void_nodedef, void * void_stringArray)
 {
 	DSL_nodeDefinition * nodedef = reinterpret_cast<DSL_nodeDefinition*>(void_nodedef);
 	DSL_stringArray * strarr = reinterpret_cast<DSL_stringArray*>(void_stringArray);
 	return nodedef->SetNumberOfOutcomes(*strarr);
+}
+
+int nodedef_SetNumberOfOutcomes_Int(void * void_nodedef, int outcomeNumber)
+{
+	DSL_nodeDefinition * nodedef = reinterpret_cast<DSL_nodeDefinition*>(void_nodedef);
+	return nodedef->SetNumberOfOutcomes(outcomeNumber);
 }

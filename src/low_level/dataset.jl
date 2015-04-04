@@ -94,14 +94,10 @@ function set_float( dset::Dataset, var::Integer, rec::Integer, value::FloatingPo
 
 	ccall( (:dataset_setFloat, LIB_SMILE), Void, (Ptr{Void},Cint,Cint,Cfloat), dset.ptr, var, rec, value )
 end
-function set_missing( dset::Dataset, var::Integer, rec::Integer )
-
+set_missing( dset::Dataset, var::Integer, rec::Integer ) =
 	ccall( (:dataset_setMissing, LIB_SMILE), Void, (Ptr{Void},Cint,Cint), dset.ptr, var, rec )
-end
-function get_missing_int( dset::Dataset, var::Integer )
-
+get_missing_int( dset::Dataset, var::Integer ) =
 	ccall( (:dataset_getMissingInt, LIB_SMILE), Cint, (Ptr{Void},Cint), dset.ptr, var )
-end
 function get_missing_float( dset::Dataset, var::Integer )
 
 	ccall( (:dataset_getMissingFloat, LIB_SMILE), Cfloat, (Ptr{Void},Cint), dset.ptr, var )

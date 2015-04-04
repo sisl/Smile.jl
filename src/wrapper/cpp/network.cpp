@@ -88,6 +88,12 @@ void network_GetParents(void * void_net, int ofThisNode, int * parentHandles, un
 	*len = (unsigned)(parents.NumItems());
 }
 
+int network_FindNode(void * void_net, char *withThisId)
+{
+	DSL_network * net = reinterpret_cast<DSL_network*>(void_net);
+	return net->FindNode(withThisId);
+}
+
 int network_GetNextNode( void * void_net, int ofThisNode )
 {
 	DSL_network * net = reinterpret_cast<DSL_network*>(void_net);

@@ -1,2 +1,8 @@
 *.[oa]
 lib/
+*.out
+*.xdsl
+pc*
+naive*
+test*
+

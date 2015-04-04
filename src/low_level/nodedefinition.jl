@@ -61,7 +61,9 @@ set_definition( nodedef::NodeDefinition, dblarr::DoubleArray ) =
 	ccall( (:nodedef_SetDefinition, LIB_SMILE), Int32, (Ptr{Void},Ptr{Void}), nodedef.ptr, dblarr.ptr )
 
 set_number_of_outcomes( nodedef::NodeDefinition, idarr::IdArray ) = 
-	ccall( (:nodedef_SetNumberOfOutcomes, LIB_SMILE), Int32, (Ptr{Void},Ptr{Void}), nodedef.ptr, idarr.ptr )
+	ccall( (:nodedef_SetNumberOfOutcomes_Names, LIB_SMILE), Int32, (Ptr{Void},Ptr{Void}), nodedef.ptr, idarr.ptr )
+set_number_of_outcomes( nodedef::NodeDefinition, outcomeNumber::Integer ) = 
+	ccall( (:nodedef_SetNumberOfOutcomes_Int, LIB_SMILE), Int32, (Ptr{Void},Cint), nodedef.ptr, outcomeNumber )
 get_number_of_outcomes(nodedef::NodeDefinition) =
 	ccall( (:nodedef_GetNumberOfOutcomes, LIB_SMILE), Int32, (Ptr{Void},), nodedef.ptr)
 

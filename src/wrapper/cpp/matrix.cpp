@@ -29,6 +29,12 @@ double dmatrix_GetAtInd( void * void_dmat, int index )
 	return retval;	
 }
 
+void dmatrix_SetAtInd( void * void_dmat, int index, double value )
+{
+	DSL_Dmatrix * dmat = reinterpret_cast<DSL_Dmatrix*>(void_dmat);
+	dmat->Subscript(index) = value;
+}
+
 int dmatrix_GetNumberOfDimensions( void * void_dmat )
 {
 	DSL_Dmatrix * dmat = reinterpret_cast<DSL_Dmatrix*>(void_dmat);
