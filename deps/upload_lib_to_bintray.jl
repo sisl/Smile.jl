@@ -18,12 +18,14 @@ curpath = dirname(@__FILE__() )
 downloads = curpath*"/downloads" 
 @assert(isdir(downloads))
 
-srcfile = downloads *"/libsmilejl.so"
+srcfile = downloads * "/libsmilejl.so"
 println("uploading ", srcfile)
 println("username: ", USERNAME)
 println("destpath: ", DESTPATH)
 
 run(`curl -T $srcfile -u$(USERNAME):$(APIKEY) https://api.bintray.com/content/$(USERNAME)/$DESTPATH`)
+
+# NOTE(tim): if this complains that you published more than 180 days ago, just delete the "version" on bintray and recreate it
 
 println("\tTry running build.jl to make sure the file can be downloaded")
 println("done")
