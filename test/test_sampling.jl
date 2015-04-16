@@ -35,9 +35,9 @@ let
     set_unchecked_value(thecoordinates, 0.3); next(thecoordinates)
     set_unchecked_value(thecoordinates, 0.6)
 
-    test_vec_approx_equal(get_cpt_probability_vec_noevidence(net, success, Dict{Cint, Cint}()), [0.2, 0.8])
-    test_vec_approx_equal(get_cpt_probability_vec_noevidence(net, forecast, [success=>int32(0)]), [0.4, 0.4, 0.2])
-    test_vec_approx_equal(get_cpt_probability_vec_noevidence(net, forecast, [success=>int32(1)]), [0.1, 0.3, 0.6])
+    test_vec_approx_equal(get_cpt_probability_vec(net, success, Dict{Cint, Cint}()), [0.2, 0.8])
+    test_vec_approx_equal(get_cpt_probability_vec(net, forecast, [success=>int32(0)]), [0.4, 0.4, 0.2])
+    test_vec_approx_equal(get_cpt_probability_vec(net, forecast, [success=>int32(1)]), [0.1, 0.3, 0.6])
 
     set_default_BN_algorithm(net, DSL_ALG_BN_LAURITZEN)
     clear_all_evidence(net)

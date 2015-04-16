@@ -124,10 +124,13 @@ extern "C" void *       createIntArray();
 extern "C" void *       createIntArray_InitialSize(int initialSize);
 extern "C" void *       createIntArray_Copy(void * void_intarr);
 extern "C" void         freeIntArray( void * void_intarr );
+extern "C" void         intarray_UseAsList( void * void_intarr, int nItems );
 extern "C" int          intarray_NumItems( void * void_intarr );
 extern "C" int          intarray_GetSize( void * void_intarr );
 extern "C" int          intarray_GetIndex( void * void_intarr, int index );
 extern "C" void         intarray_SetIndex( void * void_intarr, int index, int value );
+extern "C" int          intarray_Insert( void * void_intarr, int here, int thisNumber );
+extern "C" int          intarray_Add( void * void_intarr, int thisNumber );
 
 ///////////////////////////////////////
 //             DSL_ID_ARRAY          //

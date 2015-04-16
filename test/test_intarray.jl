@@ -1,9 +1,10 @@
 
 arr = IntArray(4)
-arr[0] = 1
-arr[1] = 2
-arr[2] = 3
-arr[3] = 4
+push!(arr, 1)
+push!(arr, 2)
+push!(arr, 3)
+push!(arr, 4)
+use_as_list(arr, 4)
 @test size(arr) == 4
 
 @test arr[0] == 1

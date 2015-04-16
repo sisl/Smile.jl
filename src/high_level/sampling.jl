@@ -2,7 +2,8 @@
 export 
         normalize!,
         draw_from_p_vec,
-        get_cpt_probability_vec_noevidence,
+        get_marginal_probability_vec,
+        get_cpt_probability_vec,
         condition_on_beliefs!,
         monte_carlo_probability_estimate,
         does_assignment_match_evidence,
@@ -41,7 +42,31 @@ function draw_from_p_vec(p::Vector{Float64})
     return i-1
 end
 
-function get_cpt_probability_vec_noevidence(net::Network, nodeid::Cint, assignment::Dict{Cint,Cint})
+function get_marginal_probability_vec(net::Network, nodeid::Cint, evidence::Dict{Cint, Cint}=(Cint=>Cint)[])
+
+    #=
+    Returns the probabilty vector [P_nodeid=0, P_nodeid=1, ...]::Vector{Float64}
+    Assumes no parental assignment
+    =#
+
+    condition_on_beliefs!(net, evidence)
+
+    node    = get_node(net, nodeid)
+    nodedef = definition(node)
+    nodeval = value(node)
+    coord = SysCoordinates(nodeval)
+    n = get_number_of_outcomes(nodedef)
+
+    retval = Array(Float64, n)
+    for i = 1 : n
+        coord[0] = i-1
+        go_to_current_position(coord)
+        retval[i] = unchecked_value(coord)
+    end
+
+    retval
+end
+function get_cpt_probability_vec(net::Network, nodeid::Cint, parental_assignment::Dict{Cint,Cint})
 
     #=
     Returns the probabilty vector [P_nodeid=0, P_nodeid=1, ...]::Vector{Float64}
@@ -57,7 +82,7 @@ function get_cpt_probability_vec_noevidence(net::Network, nodeid::Cint, assignme
 
     coordinates = IntArray(nPa+1)
     for i = 1 : nPa
-        coordinates[i-1] = assignment[parents[i]]
+        coordinates[i-1] = parental_assignment[parents[i]]
     end
 
     cpt = get_matrix(nodedef)::DMatrix
@@ -84,22 +109,22 @@ function condition_on_beliefs!(net::Network, assignment::Dict{Cint, Cint})
     net
 end
 
-function Base.rand(net::Network; 
-    ordering::Vector{Int} = to_native_int_array(partial_ordering(net)::IntArray)
+function Base.rand{I<:Integer}(net::Network; 
+    ordering::Vector{I} = to_native_int_array(partial_ordering(net)::IntArray)
     )
 
     # returns a Dict{Cint, Cint} of NodeIndex -> Value
 
     assignment = Dict{Cint, Cint}()
     for nodeid in ordering
-        p = normalize!(get_cpt_probability_vec_noevidence(net, nodeid, assignment))
+        p = normalize!(get_cpt_probability_vec(net, int32(nodeid), assignment))
         assignment[nodeid] = draw_from_p_vec(p)
     end
     assignment
 end
 
-function Base.rand!(net::Network, assignment::Dict{Cint, Cint};
-    ordering::Vector{Int} = to_native_int_array(partial_ordering(net)::IntArray)
+function Base.rand!{I<:Integer}(net::Network, assignment::Dict{Cint, Cint};
+    ordering::Vector{I} = to_native_int_array(partial_ordering(net)::IntArray)
     )
 
     condition_on_beliefs!(net, assignment)
@@ -132,8 +157,8 @@ function Base.rand!(net::Network, assignment::Dict{Cint, Cint};
     assignment
 end
 
-function probability(net, assignment::Dict{Cint, Cint};
-    ordering::Vector{Int} = to_native_int_array(partial_ordering(net)::IntArray)
+function probability{I<:Integer}(net, assignment::Dict{Cint, Cint};
+    ordering::Vector{I} = to_native_int_array(partial_ordering(net)::IntArray)
     )
     # P(assignment)
 
@@ -162,15 +187,21 @@ function probability(net, assignment::Dict{Cint, Cint};
 
     retval
 end
-function probabilities(net, assignment::Dict{Cint, Cint};
-    ordering::Vector{Int} = to_native_int_array(partial_ordering(net)::IntArray)
+function probabilities{I<:Integer}(net, assignment::Dict{Cint, Cint}, evidence::Dict{Cint, Cint}=(Cint=>Cint)[];
+    ordering::Vector{I} = to_native_int_array(partial_ordering(net)::IntArray),
     )
     # P(assignment)
 
     retval = Dict{Cint, Float64}()
 
-    clear_all_evidence(net)
-    update_beliefs(net)
+    if !isempty(evidence)
+        @assert(!issubset(evidence, assignment))
+        condition_on_beliefs!(net, evidence)
+    else
+        clear_all_evidence(net)
+        update_beliefs(net)
+    end
+    
 
     for nodeid in ordering
         if haskey(assignment, nodeid)
@@ -188,8 +219,8 @@ function probabilities(net, assignment::Dict{Cint, Cint};
 
     retval
 end
-function logprob(net, assignment::Dict{Cint, Cint};
-    ordering::Vector{Int} = to_native_int_array(partial_ordering(net)::IntArray)
+function logprob{I<:Integer}(net, assignment::Dict{Cint, Cint};
+    ordering::Vector{I} = to_native_int_array(partial_ordering(net)::IntArray)
     )
     # P(assignment)
 
@@ -220,7 +251,7 @@ function logprob(net, assignment::Dict{Cint, Cint};
 end
 
 
-function marginal_probability(net, target::Dict{Cint, Cint}, evidence::Dict{Cint, Cint}=Dict{Cint, Cint}())
+function marginal_probability(net, target::Dict{Cint, Cint}, evidence::Dict{Cint, Cint}=(Cint=>Cint)[])
     # P(target ∣ evidence)
 
     retval = 1.0
@@ -241,7 +272,7 @@ function marginal_probability(net, target::Dict{Cint, Cint}, evidence::Dict{Cint
 
     retval
 end
-function marginal_logprob(net, target::Dict{Cint, Cint}, evidence::Dict{Cint, Cint}=Dict{Cint, Cint}())
+function marginal_logprob(net, target::Dict{Cint, Cint}, evidence::Dict{Cint, Cint}=(Cint=>Cint)[])
     # P(target ∣ evidence)
 
     retval = 0.0

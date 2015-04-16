@@ -28,6 +28,11 @@ void freeIntArray(void * void_intarr)
     delete arr;
 }
 
+void intarray_UseAsList(void * void_intarr, int nItems)
+{
+    DSL_intArray * arr = reinterpret_cast<DSL_intArray*>(void_intarr);
+    arr->UseAsList(nItems);
+}
 int intarray_NumItems(void * void_intarr)
 {
     DSL_intArray * arr = reinterpret_cast<DSL_intArray*>(void_intarr);
@@ -47,4 +52,14 @@ void intarray_SetIndex(void * void_intarr, int index, int value)
 {
     DSL_intArray * arr = reinterpret_cast<DSL_intArray*>(void_intarr);
     (*arr)[index] = value;
+}
+int intarray_Insert(void * void_intarr, int here, int thisNumber)
+{
+    DSL_intArray * arr = reinterpret_cast<DSL_intArray*>(void_intarr);
+    return arr->Insert(here, thisNumber);
+}
+int intarray_Add(void * void_intarr, int thisNumber)
+{
+    DSL_intArray * arr = reinterpret_cast<DSL_intArray*>(void_intarr);
+    return arr->Add(thisNumber);
 }
