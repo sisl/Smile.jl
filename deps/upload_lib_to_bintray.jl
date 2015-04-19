@@ -23,6 +23,7 @@ println("uploading ", srcfile)
 println("username: ", USERNAME)
 println("destpath: ", DESTPATH)
 
+println("curl -T $srcfile -u$(USERNAME):$(APIKEY) https://api.bintray.com/content/$(USERNAME)/$DESTPATH")
 run(`curl -T $srcfile -u$(USERNAME):$(APIKEY) https://api.bintray.com/content/$(USERNAME)/$DESTPATH`)
 
 # NOTE(tim): if this complains that you published more than 180 days ago, just delete the "version" on bintray and recreate it
