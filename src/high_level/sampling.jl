@@ -81,7 +81,7 @@ function get_cpt_probability_vec(net::Network, nodeid::Cint, parental_assignment
     nPa = length(parents)
 
     coordinates = IntArray(nPa+1)
-    for i = 1 : nPa
+    for i in 1 : nPa
         coordinates[i-1] = parental_assignment[parents[i]]
     end
 
@@ -89,7 +89,7 @@ function get_cpt_probability_vec(net::Network, nodeid::Cint, parental_assignment
     coordinates[nPa] = 0
     ind = coordinates_to_index(cpt, coordinates)
     retval = Array(Float64, n)
-    for i = 1 : n
+    for i in 1 : n
         retval[i] = cpt[ind]
         ind += 1
     end
