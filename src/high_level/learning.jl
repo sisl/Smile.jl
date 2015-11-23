@@ -50,15 +50,15 @@ function writetable{R <: Real, S<:AbstractString}(filename::AbstractString, mat:
 	@printf(f, "%s\n", names[end])
 
 	if isa(R, Integer)
-		for i = 1 : n
-			for j = 1 : m-1
+		for i in 1 : n
+			for j in 1 : m-1
 				@printf(f, "%d%c", mat[i,j], separator)
 			end
 			@printf(f, "%d\n", mat[i,m])
 		end
 	else
-		for i = 1 : n
-			for j = 1 : m-1
+		for i in 1 : n
+			for j in 1 : m-1
 				@printf(f, "%f%c", mat[i,j], separator)
 			end
 			@printf(f, "%f\n", mat[i,m])
@@ -84,7 +84,7 @@ function alphanumeric_names(n::Int)
 	@assert(n > 0)
 	names = Array(AbstractString, n)
 	names[1] = "a"
-	for i = 2 : n
+	for i in 2 : n
 		names[i] = increment_alphanumeric_string(names[i-1])
 	end
 	names
