@@ -13,8 +13,7 @@ module Smile
 ##
 ##############################################################################
 
-curpath = dirname(@__FILE__() )
-pathtoadd = curpath[1:end-3]*"deps/downloads/"
+pathtoadd = Pkg.dir("Smile", "deps", "downloads")
 
 if isempty(Libdl.find_library(collect(["libsmilejl"]), collect([pathtoadd])))
 	warn("Could not communicate with libsmilejl. Make sure it exists and that it is on the path.")
