@@ -13,7 +13,7 @@ if true
 		@test has_incoming_edge(p, i) == false
 		@test has_outgoing_edge(p, i) == false
 	end
-	
+
 	@test has_cycle(p) == false
 	@test is_DAG(p) == true
 
@@ -47,7 +47,7 @@ if true
 	set_edge(p, 1, 2, DSL_EDGETYPE_DIRECTED)
 	net = Network()
 
-	mat = iround(3*rand(1000,3))
+	mat = round(Int, 3*rand(1000,3))
 	dset = Dataset()
 	add_int_var(dset, "A")
 	add_int_var(dset, "B")

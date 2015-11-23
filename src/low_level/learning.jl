@@ -24,50 +24,50 @@ type DSL_TreeAugmentedNaiveBayes <: DSL_LearningAlgorithm end
 
 abstract DSL_LearnParams
 type LearnParams_BayesianSearch <: DSL_LearnParams
-	maxparents           :: Int            # limits the maximum number of parents a node can have
-	maxsearchtime        :: Int            # maximum runtime of the algorithm [seconds?] (0 = infinite)
-	niterations          :: Int            # number of searches (and indirectly number of random restarts)
-    linkprobability      :: Float64        # defines the probabilty of having an arc between two nodes
-    priorlinkprobability :: Float64        # defines a prior existence of an arc between two nodes
-    priorsamplesize      :: Int            # influences the "strength" of prior link probability.
-    seed                 :: Int            # random seed (0=none)
-    forced_arcs          :: Set{(Int,Int)} # a list of (i->j) arcs which are forced to be in the network
-    forbidden_arcs       :: Set{(Int,Int)} # a list of (i->j) arcs which are forbidden in the network
-    tiers                :: Set{(Int,Int)} # a list of (i->tier) associating nodes with a particular tier (tier starts at 1, variable starts at 0)
+		maxparents           :: Int            # limits the maximum number of parents a node can have
+		maxsearchtime        :: Int            # maximum runtime of the algorithm [seconds?] (0 = infinite)
+		niterations          :: Int            # number of searches (and indirectly number of random restarts)
+		linkprobability      :: Float64        # defines the probabilty of having an arc between two nodes
+		priorlinkprobability :: Float64        # defines a prior existence of an arc between two nodes
+		priorsamplesize      :: Int            # influences the "strength" of prior link probability.
+		seed                 :: Int            # random seed (0=none)
+		forced_arcs          :: Set{Tuple{Int,Int}} # a list of (i->j) arcs which are forced to be in the network
+		forbidden_arcs       :: Set{Tuple{Int,Int}} # a list of (i->j) arcs which are forbidden in the network
+		tiers                :: Set{Tuple{Int,Int}} # a list of (i->tier) associating nodes with a particular tier (tier starts at 1, variable starts at 0)
 
-    LearnParams_BayesianSearch() = new(5, 0, 20, 0.1, 0.001, 50, 0, Set{(Int,Int)}(), Set{(Int,Int)}(), Set{(Int,Int)}())
+		LearnParams_BayesianSearch() = new(5, 0, 20, 0.1, 0.001, 50, 0, Set{Tuple{Int,Int}}(), Set{Tuple{Int,Int}}(), Set{Tuple{Int,Int}}())
 end
 type LearnParams_GreedyThickThinning <: DSL_LearnParams
-	maxparents           :: Int # limits the maximum number of parents a node can have
-	priors               :: Int # either K2 or BDeu
-	netWeight            :: Float64
-	forced_arcs          :: Set{(Int,Int)} # a list of (i->j) arcs which are forced to be in the network
-    forbidden_arcs       :: Set{(Int,Int)} # a list of (i->j) arcs which are forbidden in the network
-    tiers                :: Set{(Int,Int)} # a list of (i->tier) associating nodes with a particular tier
-    LearnParams_GreedyThickThinning() = new(5, DSL_K2, 1.0, Set{(Int,Int)}(), Set{(Int,Int)}(), Set{(Int,Int)}())
+		maxparents           :: Int # limits the maximum number of parents a node can have
+		priors               :: Int # either K2 or BDeu
+		netWeight            :: Float64
+		forced_arcs          :: Set{Tuple{Int,Int}} # a list of (i->j) arcs which are forced to be in the network
+		forbidden_arcs       :: Set{Tuple{Int,Int}} # a list of (i->j) arcs which are forbidden in the network
+		tiers                :: Set{Tuple{Int,Int}} # a list of (i->tier) associating nodes with a particular tier
+		LearnParams_GreedyThickThinning() = new(5, DSL_K2, 1.0, Set{Tuple{Int,Int}}(), Set{Tuple{Int,Int}}(), Set{Tuple{Int,Int}}())
 end
 type LearnParams_NaiveBayes <: DSL_LearnParams
-	classVariableId :: String # the variable ID of the column that is our class
+	classVariableId :: AbstractString # the variable ID of the column that is our class
 
 	LearnParams_NaiveBayes() = new("class")
-	LearnParams_NaiveBayes(var::String) = new(var)
+	LearnParams_NaiveBayes(var::AbstractString) = new(var)
 end
 type LearnParams_PC <: DSL_LearnParams
-	maxcache      :: Uint64
+	maxcache      :: UInt64
 	maxAdjacency  :: Cint
 	maxSearchTime :: Cint
 	significance  :: Float64
-	forced_arcs     :: Set{(Int,Int)} # a list of (i->j) arcs which are forced to be in the network
-    forbidden_arcs  :: Set{(Int,Int)} # a list of (i->j) arcs which are forbidden in the network
-    tiers           :: Set{(Int,Int)} # a list of (i->tier) associating nodes with a particular tier
+	forced_arcs     :: Set{Tuple{Int,Int}} # a list of (i->j) arcs which are forced to be in the network
+		forbidden_arcs  :: Set{Tuple{Int,Int}} # a list of (i->j) arcs which are forbidden in the network
+		tiers           :: Set{Tuple{Int,Int}} # a list of (i->tier) associating nodes with a particular tier
 
-	LearnParams_PC() = new(2048, 8, 0, 0.05, Set{(Int,Int)}(), Set{(Int,Int)}(), Set{(Int,Int)}())
+	LearnParams_PC() = new(2048, 8, 0, 0.05, Set{Tuple{Int,Int}}(), Set{Tuple{Int,Int}}(), Set{Tuple{Int,Int}}())
 end
 type LearnParams_TreeAugmentedNaiveBayes <: DSL_LearnParams
-	classvar      :: String # Used to pick the class variable for the network. Is case-sensitive.
+	classvar      :: AbstractString # Used to pick the class variable for the network. Is case-sensitive.
 	maxSearchTime :: Cint   # maximum runtime for the algorithm
-	seed          :: Uint32 # random seed (0 for none)
-	maxcache      :: Uint64 # maximum cache size (units?)
+	seed          :: UInt32 # random seed (0 for none)
+	maxcache      :: UInt64 # maximum cache size (units?)
 
 	LearnParams_TreeAugmentedNaiveBayes() = new("class", 0, 0, 2048)
 	LearnParams_TreeAugmentedNaiveBayes(class) = new(class, 0, 0, 2048)
@@ -84,11 +84,11 @@ function learn!( net::Network, dset::Dataset, ::Type{DSL_BayesianSearch},
 	lentiers,       tiers_arr         = _get_arcs_arr(params.tiers)
 
 
-	retval = ccall( (:dataset_learnBayesianSearch, LIB_SMILE), Bool, 
+	retval = ccall( (:dataset_learnBayesianSearch, LIB_SMILE), Bool,
 		(Ptr{Void},Ptr{Void},Int32,Int32,Int32,Float64,Float64,Int32,Int32,
-			Ptr{Int32},Int32,Ptr{Int32},Int32,Ptr{Int32},Int32), 
-		dset.ptr, net.ptr, params.maxparents, params.maxsearchtime, params.niterations, 
-		params.linkprobability, params.priorlinkprobability, params.priorsamplesize, 
+			Ptr{Int32},Int32,Ptr{Int32},Int32,Ptr{Int32},Int32),
+		dset.ptr, net.ptr, params.maxparents, params.maxsearchtime, params.niterations,
+		params.linkprobability, params.priorlinkprobability, params.priorsamplesize,
 		params.seed, forcedarcs_arr, nforcedarcs,
 		forbiddenarcs_arr, nforbiddenarcs, tiers_arr, lentiers )
 	if ( !retval )
@@ -96,7 +96,7 @@ function learn!( net::Network, dset::Dataset, ::Type{DSL_BayesianSearch},
 	end
 	return retval # true on success
 end
-function learn!( net::Network, dset::Dataset, ::Type{DSL_GreedyThickThinning}, 
+function learn!( net::Network, dset::Dataset, ::Type{DSL_GreedyThickThinning},
 	params::LearnParams_GreedyThickThinning = LearnParams_GreedyThickThinning()
 	)
 
@@ -104,10 +104,10 @@ function learn!( net::Network, dset::Dataset, ::Type{DSL_GreedyThickThinning},
 	nforbiddenarcs, forbiddenarcs_arr = _get_arcs_arr(params.forbidden_arcs)
 	lentiers,       tiers_arr         = _get_arcs_arr(params.tiers)
 
-	retval = ccall( (:dataset_learnGreedyThickThinning, LIB_SMILE), Bool, 
+	retval = ccall( (:dataset_learnGreedyThickThinning, LIB_SMILE), Bool,
 		(Ptr{Void},Ptr{Void},Int32,Int32,Float64,
 			Ptr{Int32},Int32,Ptr{Int32},Int32,Ptr{Int32},Int32),
-		dset.ptr, net.ptr, params.priors, params.maxparents, 
+		dset.ptr, net.ptr, params.priors, params.maxparents,
 		params.netWeight, forcedarcs_arr, nforcedarcs,
 		forbiddenarcs_arr, nforbiddenarcs, tiers_arr, lentiers )
 	if ( !retval )
@@ -115,7 +115,7 @@ function learn!( net::Network, dset::Dataset, ::Type{DSL_GreedyThickThinning},
 	end
 	return retval # true on success
 end
-function learn!( net::Network, dset::Dataset, ::Type{DSL_NaiveBayes}, 
+function learn!( net::Network, dset::Dataset, ::Type{DSL_NaiveBayes},
 	params::LearnParams_NaiveBayes = LearnParams_NaiveBayes()
 	)
 
@@ -123,15 +123,15 @@ function learn!( net::Network, dset::Dataset, ::Type{DSL_NaiveBayes},
 		warn("class variable $(params.classVariableId) could not be found")
 	end
 
-	retval = ccall( (:dataset_learnNaiveBayes, LIB_SMILE), Bool, 
-		(Ptr{Void},Ptr{Void},Ptr{Uint8}),
+	retval = ccall( (:dataset_learnNaiveBayes, LIB_SMILE), Bool,
+		(Ptr{Void},Ptr{Void},Ptr{UInt8}),
 		dset.ptr, net.ptr, bytestring(params.classVariableId) )
 	if ( !retval )
 		warn("Dataset::learn_naive_bayes: did not work")
 	end
 	return retval # true on success
 end
-function learn!( net::Network, dset::Dataset, ::Type{DSL_TreeAugmentedNaiveBayes}, 
+function learn!( net::Network, dset::Dataset, ::Type{DSL_TreeAugmentedNaiveBayes},
 	params::LearnParams_TreeAugmentedNaiveBayes = LearnParams_TreeAugmentedNaiveBayes()
 	)
 
@@ -139,8 +139,8 @@ function learn!( net::Network, dset::Dataset, ::Type{DSL_TreeAugmentedNaiveBayes
 		warn("class variable $(params.classvar) could not be found")
 	end
 
-	retval = ccall( (:dataset_learnTAN, LIB_SMILE), Bool, 
-		(Ptr{Void},Ptr{Void},Ptr{Uint8}, Cint, Uint32, Uint64),
+	retval = ccall( (:dataset_learnTAN, LIB_SMILE), Bool,
+		(Ptr{Void},Ptr{Void},Ptr{UInt8}, Cint, UInt32, UInt64),
 		dset.ptr, net.ptr, bytestring(params.classvar), params.maxSearchTime, params.seed, params.maxcache )
 	if ( !retval )
 		warn("Dataset::learn_TAN: did not work")
@@ -164,12 +164,12 @@ function learn!( pat::Pattern, dset::Dataset, ::Type{DSL_PC},
 	nforbiddenarcs, forbiddenarcs_arr = _get_arcs_arr(params.forbidden_arcs)
 	lentiers,       tiers_arr         = _get_arcs_arr(params.tiers)
 
-	retval = ccall( (:dataset_learnPC, LIB_SMILE), Bool, 
-		(Ptr{Void},Ptr{Void},Uint64,Cint,Cint,Float64,
+	retval = ccall( (:dataset_learnPC, LIB_SMILE), Bool,
+		(Ptr{Void},Ptr{Void},UInt64,Cint,Cint,Float64,
 			Ptr{Int32},Int32,Ptr{Int32},Int32,Ptr{Int32},Int32),
-		dset.ptr, pat.ptr, params.maxcache, params.maxAdjacency, 
+		dset.ptr, pat.ptr, params.maxcache, params.maxAdjacency,
 		params.maxSearchTime, params.significance,
-		forcedarcs_arr, nforcedarcs, forbiddenarcs_arr, 
+		forcedarcs_arr, nforcedarcs, forbiddenarcs_arr,
 		nforbiddenarcs, tiers_arr, lentiers)
 	if ( !retval )
 		warn("Dataset::dataset_learnPC: did not work")
@@ -177,17 +177,17 @@ function learn!( pat::Pattern, dset::Dataset, ::Type{DSL_PC},
 	return retval # true on success
 end
 
-learn!( net::Network, dset::Dataset, params::LearnParams_BayesianSearch ) = 
+learn!( net::Network, dset::Dataset, params::LearnParams_BayesianSearch ) =
 	learn!(net, dset, DSL_BayesianSearch, params)
-learn!( net::Network, dset::Dataset, params::LearnParams_GreedyThickThinning ) = 
+learn!( net::Network, dset::Dataset, params::LearnParams_GreedyThickThinning ) =
 	learn!(net, dset, DSL_GreedyThickThinning, params)
-learn!( net::Network, dset::Dataset, params::LearnParams_NaiveBayes ) = 
+learn!( net::Network, dset::Dataset, params::LearnParams_NaiveBayes ) =
 	learn!(net, dset, DSL_NaiveBayes, params)
-learn!( net::Network, dset::Dataset, params::LearnParams_TreeAugmentedNaiveBayes ) = 
+learn!( net::Network, dset::Dataset, params::LearnParams_TreeAugmentedNaiveBayes ) =
 	learn!(net, dset, DSL_TreeAugmentedNaiveBayes, params)
-learn!( net::Network, dset::Dataset, params::LearnParams_PC ) = 
+learn!( net::Network, dset::Dataset, params::LearnParams_PC ) =
 	learn!(net, dset, DSL_PC, params)
-learn!( pat::Pattern, dset::Dataset, params::LearnParams_PC ) = 
+learn!( pat::Pattern, dset::Dataset, params::LearnParams_PC ) =
 	learn!(pat, dset, DSL_PC, params)
 
 function learn{S<:DSL_LearningAlgorithm}( dset::Dataset, alg::Type{S} )
@@ -203,9 +203,9 @@ end
 
 # -------
 
-function arc_requirements_do_not_conflict( 
-	forced_arcs    :: Set{(Int,Int)},
-	forbidden_arcs :: Set{(Int,Int)}
+function arc_requirements_do_not_conflict(
+	forced_arcs    :: Set{Tuple{Int,Int}},
+	forbidden_arcs :: Set{Tuple{Int,Int}}
 	)
 	# returns true if a forced arc is also a forbidden arc
 	for tup in params.forbidden_arcs
@@ -215,10 +215,10 @@ function arc_requirements_do_not_conflict(
 	end
 	true
 end
-function arc_requirements_do_not_conflict( 
-	forced_arcs    :: Set{(Int,Int)},
-	forbidden_arcs :: Set{(Int,Int)},
-	tiers          :: Set{(Int,Int)},
+function arc_requirements_do_not_conflict(
+	forced_arcs    :: Set{Tuple{Int,Int}},
+	forbidden_arcs :: Set{Tuple{Int,Int}},
+	tiers          :: Set{Tuple{Int,Int}},
 	)
 	# converts tiers to arc requirements before checking conflict
 	forced, forbidden = _tiers_to_arc_requirements(tiers)
@@ -226,16 +226,16 @@ function arc_requirements_do_not_conflict(
 	union!(forbidden, forbidden_arcs)
 	arc_requirements_do_not_conflict(forced, forbidden)
 end
-arc_requirements_do_not_conflict( params::DSL_BayesianSearch ) = 
+arc_requirements_do_not_conflict( params::DSL_BayesianSearch ) =
 	arc_requirements_do_not_conflict(params.forced_arcs, params.forbidden_arcs, params.tiers)
-arc_requirements_do_not_conflict( params::DSL_GreedyThickThinning ) = 
+arc_requirements_do_not_conflict( params::DSL_GreedyThickThinning ) =
 	arc_requirements_do_not_conflict(params.forced_arcs, params.forbidden_arcs, params.tiers)
-arc_requirements_do_not_conflict( params::DSL_BayesianSearch ) = 
+arc_requirements_do_not_conflict( params::DSL_BayesianSearch ) =
 	arc_requirements_do_not_conflict(params.forced_arcs, params.forbidden_arcs, params.tiers)
 
 # -------
 
-function _get_arcs_arr(arcs::Set{(Int,Int)})
+function _get_arcs_arr(arcs::Set{Tuple{Int,Int}})
 	narcs = length(arcs)
 	arr = zeros(Int32, 2*narcs)
 	for (i,tup) in enumerate(arcs)
@@ -245,14 +245,14 @@ function _get_arcs_arr(arcs::Set{(Int,Int)})
 	(narcs, arr)
 end
 function _tiers_to_arc_requirements(
-	tiers :: Set{(Int,Int)} # a list of (i->tier) associating nodes with a particular tier
+	tiers :: Set{Tuple{Int,Int}} # a list of (i->tier) associating nodes with a particular tier
 	)
 
 	# the node starts counting at 0
 	# the tier starts counting at 1
 
-	forced_arcs    :: Set{(Int,Int)}()
-	forbidden_arcs :: Set{(Int,Int)}()
+	forced_arcs    :: Set{Tuple{Int,Int}}()
+	forbidden_arcs :: Set{Tuple{Int,Int}}()
 
 	for (i,tier_i) in tiers
 		for (j,tier_j) in tiers

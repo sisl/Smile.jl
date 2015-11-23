@@ -11,7 +11,7 @@ end
 function test_vec_approx_equal{T<:Real, S<:Real}(a::Vector{T}, b::Vector{S}, tol::Float64)
 	@test length(a) == length(b)
 	for i = 1 : length(a)
-		@test isapprox(a[i], b[i], tol)
+		@test abs(a[i] - b[i]) < tol
 	end
 	true
 end
@@ -24,4 +24,3 @@ include("test_learning.jl")
 include("test_sampling.jl")
 include("tut1_create_a_bayesian_network.jl")
 include("high_level_learning.jl")
-

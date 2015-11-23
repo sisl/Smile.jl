@@ -8,7 +8,7 @@ if true # create local scope
 
 	# test alphanumeric_names
 	@test alphanumeric_names(5)==["a","b","c","d","e"]
-	@test_throws ErrorException alphanumeric_names(0)
+	@test_throws AssertionError alphanumeric_names(0)
 
 	# test learn_bayesian_search + !
 	mat = rand(1:4, 5000, 4)

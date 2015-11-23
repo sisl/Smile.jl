@@ -15,7 +15,7 @@ Parameters
 .. code-block:: julia
 
 	LearnParams_NaiveBayes() = new("class")
-	LearnParams_NaiveBayes(var::String) = new(var)
+	LearnParams_NaiveBayes(var::AbstractString) = new(var)
 
 Examples
 --------

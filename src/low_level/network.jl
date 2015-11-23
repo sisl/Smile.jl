@@ -43,14 +43,14 @@ function add_arc( net::Network, theParent::Integer, theChild::Integer )
 	end
 end
 
-function add_node( net::Network, nodeType::Integer, nodeName::String )
+function add_node( net::Network, nodeType::Integer, nodeName::AbstractString )
 
 	if !is_nodetype_id(nodeType)
 		error( "network_AddNode: nodeType not a recognized type" )
 	end
 
-	error_buffer = Array(Uint8, 128)
-	nodeId = ccall( (:network_AddNode, LIB_SMILE), Int32, (Ptr{Void}, Int32, Ptr{Uint8}, Ptr{Uint8}), net.ptr, nodeType, bytestring(nodeName), error_buffer )
+	error_buffer = Array(UInt8, 128)
+	nodeId = ccall( (:network_AddNode, LIB_SMILE), Int32, (Ptr{Void}, Int32, Ptr{UInt8}, Ptr{UInt8}), net.ptr, nodeType, bytestring(nodeName), error_buffer )
 	if nodeId < 0
 		error_str = bytestring(error_buffer)
 		error( "network_AddNode: ", error_str )
@@ -75,10 +75,10 @@ function get_all_nodes( net::Network )
 end
 
 function get_children( net::Network, ofThisNode::Integer, len_start = 10 )
-	len = Array(Uint32,1)
+	len = Array(UInt32,1)
 	len[1] = len_start
 	arr = Array(Int32, len_start)
-	ccall( (:network_GetChildren, LIB_SMILE), Void, (Ptr{Void},Int32,Ptr{Int32},Ptr{Uint32}), net.ptr, ofThisNode, arr, len )
+	ccall( (:network_GetChildren, LIB_SMILE), Void, (Ptr{Void},Int32,Ptr{Int32},Ptr{UInt32}), net.ptr, ofThisNode, arr, len )
 	len_end = len[1]
 
 	if len_end == 0
@@ -111,10 +111,10 @@ function get_number_of_nodes( net::Network )
 end
 
 function get_parents( net::Network, ofThisNode::Integer, len_start = 10 )
-	len = Array(Uint32,1)
+	len = Array(UInt32,1)
 	len[1] = len_start
 	arr = Array(Int32, len_start)
-	ccall( (:network_GetParents, LIB_SMILE), Void, (Ptr{Void},Int32,Ptr{Int32},Ptr{Uint32}), net.ptr, ofThisNode, arr, len )
+	ccall( (:network_GetParents, LIB_SMILE), Void, (Ptr{Void},Int32,Ptr{Int32},Ptr{UInt32}), net.ptr, ofThisNode, arr, len )
 	len_end = len[1]
 
 	if len_end == 0
@@ -126,50 +126,50 @@ function get_parents( net::Network, ofThisNode::Integer, len_start = 10 )
 	return arr[1:len_end]
 end
 
-find_node( net::Network, withThisID::String ) =
-	ccall( (:network_FindNode, LIB_SMILE), Int32, (Ptr{Void},Ptr{Uint8}), net.ptr, bytestring(withThisID) )
+find_node( net::Network, withThisID::AbstractString ) =
+	ccall( (:network_FindNode, LIB_SMILE), Int32, (Ptr{Void},Ptr{UInt8}), net.ptr, bytestring(withThisID) )
 
 function is_acyclic( net::Network )
 	retval = ccall( (:network_IsAcyclic, LIB_SMILE), Int32, (Ptr{Void},), net.ptr )
 	return retval != 0 # true if non zero
 end
 
-function read_file( net::Network, fileName::String )
+function read_file( net::Network, fileName::AbstractString )
 	# TODO: check that fileName ends with a valid file type
-	retval = ccall( (:network_ReadFile, LIB_SMILE), Int32, (Ptr{Void},Ptr{Uint8}), net.ptr, bytestring(fileName) )
+	retval = ccall( (:network_ReadFile, LIB_SMILE), Int32, (Ptr{Void},Ptr{UInt8}), net.ptr, bytestring(fileName) )
 	return retval
 end
 
-function write_file( net::Network, fileName::String )
+function write_file( net::Network, fileName::AbstractString )
 	ext = splitext(fileName)[2]
 	@assert(ext == ".dsl" || ext == ".xdsl")
 
-	retval = ccall( (:network_WriteFile, LIB_SMILE), Int32, (Ptr{Void},Ptr{Uint8}), net.ptr, bytestring(fileName) )
+	retval = ccall( (:network_WriteFile, LIB_SMILE), Int32, (Ptr{Void},Ptr{UInt8}), net.ptr, bytestring(fileName) )
 	return retval
 end
 
 # BN algorithms
-const DSL_ALG_BN_LAURITZEN            = int32( 0)
-const DSL_ALG_BN_HENRION              = int32( 1)
-const DSL_ALG_BN_PEARL                = int32( 2)
-const DSL_ALG_BN_LSAMPLING            = int32( 3)
-const DSL_ALG_BN_SELFIMPORTANCE       = int32( 4)
-const DSL_ALG_BN_HEURISTICIMPORTANCE  = int32( 5)
-const DSL_ALG_BN_BACKSAMPLING         = int32( 6)
-const DSL_ALG_BN_AISSAMPLING          = int32( 7)
-const DSL_ALG_BN_EPISSAMPLING         = int32( 8)
-const DSL_ALG_BN_LBP				  = int32( 9)
-const DSL_ALG_BN_LAURITZEN_OLD        = int32(10)
-const DSL_ALG_BN_RELEVANCEDECOMP      = int32(11)
-const DSL_ALG_BN_RELEVANCEDECOMP2     = int32(12)
-const DSL_ALG_HBN_HEPIS				  = int32(13)
-const DSL_ALG_HBN_HLW                 = int32(14)
-const DSL_ALG_HBN_HLBP				  = int32(15)
-const DSL_ALG_HBN_HLOGICSAMPLING	  = int32(16)
+const DSL_ALG_BN_LAURITZEN            = Int32( 0)
+const DSL_ALG_BN_HENRION              = Int32( 1)
+const DSL_ALG_BN_PEARL                = Int32( 2)
+const DSL_ALG_BN_LSAMPLING            = Int32( 3)
+const DSL_ALG_BN_SELFIMPORTANCE       = Int32( 4)
+const DSL_ALG_BN_HEURISTICIMPORTANCE  = Int32( 5)
+const DSL_ALG_BN_BACKSAMPLING         = Int32( 6)
+const DSL_ALG_BN_AISSAMPLING          = Int32( 7)
+const DSL_ALG_BN_EPISSAMPLING         = Int32( 8)
+const DSL_ALG_BN_LBP				          = Int32( 9)
+const DSL_ALG_BN_LAURITZEN_OLD        = Int32(10)
+const DSL_ALG_BN_RELEVANCEDECOMP      = Int32(11)
+const DSL_ALG_BN_RELEVANCEDECOMP2     = Int32(12)
+const DSL_ALG_HBN_HEPIS				        = Int32(13)
+const DSL_ALG_HBN_HLW                 = Int32(14)
+const DSL_ALG_HBN_HLBP				        = Int32(15)
+const DSL_ALG_HBN_HLOGICSAMPLING	    = Int32(16)
 
 # ID algorithms
-const DSL_ALG_ID_COOPERSOLVING        = int32(0)
-const DSL_ALG_ID_SHACHTER             = int32(1)
+const DSL_ALG_ID_COOPERSOLVING        = Int32(0)
+const DSL_ALG_ID_SHACHTER             = Int32(1)
 
 set_default_BN_algorithm(net::Network,  algorithm::Integer) = ccall( (:network_SetDefaultBNAlgorithm,  LIB_SMILE), Void, (Ptr{Void},Int32), net.ptr, algorithm )
 set_default_ID_algorithm(net::Network,  algorithm::Integer) = ccall( (:network_SetDefaultIDAlgorithm,  LIB_SMILE), Void, (Ptr{Void},Int32), net.ptr, algorithm )

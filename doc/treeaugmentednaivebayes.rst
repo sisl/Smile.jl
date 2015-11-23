@@ -18,7 +18,7 @@ Parameters
 
 **maxSearchTime**: the maximum runtime for the algorithm, milliseconds, ``Cint``
 
-**seed**: the random seed to use, 0 for time-based random seed, ``Uint32``
+**seed**: the random seed to use, 0 for time-based random seed, ``UInt32``
 
 **maxcache**: the maximum cache size, ``Uint64``
 

@@ -1,5 +1,5 @@
 
-let
+# let
     net = Network()
 
     # add a success node
@@ -35,65 +35,65 @@ let
     set_unchecked_value(thecoordinates, 0.3); next(thecoordinates)
     set_unchecked_value(thecoordinates, 0.6)
 
-    test_vec_approx_equal(get_cpt_probability_vec(net, success, Dict{Cint, Cint}()), [0.2, 0.8])
-    test_vec_approx_equal(get_cpt_probability_vec(net, forecast, [success=>int32(0)]), [0.4, 0.4, 0.2])
-    test_vec_approx_equal(get_cpt_probability_vec(net, forecast, [success=>int32(1)]), [0.1, 0.3, 0.6])
+    test_vec_approx_equal(get_cpt_probability_vec(net, success, Dict{Cint, Cint}()), [0.2, 0.8], 1e-7)
+    test_vec_approx_equal(get_cpt_probability_vec(net, forecast, Dict(success=>Int32(0))), [0.4, 0.4, 0.2], 1e-7)
+    test_vec_approx_equal(get_cpt_probability_vec(net, forecast, Dict(success=>Int32(1))), [0.1, 0.3, 0.6], 1e-7)
 
     set_default_BN_algorithm(net, DSL_ALG_BN_LAURITZEN)
     clear_all_evidence(net)
     rand(net)
 
-    evidence = [forecast=>int32(0)] # forecast is good
-    @test( does_assignment_match_evidence([success=>int32(0), forecast=>int32(0)], evidence))
-    @test( does_assignment_match_evidence([success=>int32(1), forecast=>int32(0)], evidence))
-    @test(!does_assignment_match_evidence([success=>int32(0), forecast=>int32(1)], evidence))
+    evidence = Dict(forecast=>Int32(0)) # forecast is good
+    @test( does_assignment_match_evidence(Dict(success=>Int32(0), forecast=>Int32(0)), evidence))
+    @test( does_assignment_match_evidence(Dict(success=>Int32(1), forecast=>Int32(0)), evidence))
+    @test(!does_assignment_match_evidence(Dict(success=>Int32(0), forecast=>Int32(1)), evidence))
 
-    
+
     @test(abs(monte_carlo_probability_estimate(net, evidence, 1000) - 0.16) < 0.1)
-    @test(abs(monte_carlo_probability_estimate(net, [success=>int32(1)], evidence, 100000) - 0.5) < 0.1)
+    @test(abs(monte_carlo_probability_estimate(net, Dict(success=>Int32(1)), evidence, 100000) - 0.5) < 0.1)
 
-    # println(rand!(net, [forecast=>int32(2)]))
-    # println(rand!(net, [success =>int32(1)]))
+    # println(rand!(net, [forecast=>Int32(2)]))
+    # println(rand!(net, [success =>Int32(1)]))
 
-    @test(isapprox(marginal_probability(net, [success=>int32(0)], [forecast=>int32(0)]), 0.5))
-    @test(isapprox(marginal_probability(net, [success=>int32(1)], [forecast=>int32(0)]), 0.5))
-    @test(isapprox(marginal_probability(net, [success=>int32(0)], [forecast=>int32(1)]), 0.25))
-    @test(isapprox(marginal_probability(net, [success=>int32(1)], [forecast=>int32(1)]), 0.75))
-    @test(isapprox(marginal_probability(net, [success=>int32(0)], [forecast=>int32(2)]), 0.0769, atol=0.001))
-    @test(isapprox(marginal_probability(net, [success=>int32(1)], [forecast=>int32(2)]), 0.9231, atol=0.001))
+    @test(isapprox(marginal_probability(net, Dict(success=>Int32(0)), Dict(forecast=>Int32(0))), 0.5))
+    @test(isapprox(marginal_probability(net, Dict(success=>Int32(1)), Dict(forecast=>Int32(0))), 0.5))
+    @test(isapprox(marginal_probability(net, Dict(success=>Int32(0)), Dict(forecast=>Int32(1))), 0.25))
+    @test(isapprox(marginal_probability(net, Dict(success=>Int32(1)), Dict(forecast=>Int32(1))), 0.75))
+    @test(isapprox(marginal_probability(net, Dict(success=>Int32(0)), Dict(forecast=>Int32(2))), 0.0769, atol=0.001))
+    @test(isapprox(marginal_probability(net, Dict(success=>Int32(1)), Dict(forecast=>Int32(2))), 0.9231, atol=0.001))
 
-    @test(isapprox(marginal_probability(net, [forecast=>int32(0)], [success=>int32(0)]), 0.4))
-    @test(isapprox(marginal_probability(net, [forecast=>int32(1)], [success=>int32(0)]), 0.4))
-    @test(isapprox(marginal_probability(net, [forecast=>int32(2)], [success=>int32(0)]), 0.2))
-    @test(isapprox(marginal_probability(net, [forecast=>int32(0)], [success=>int32(1)]), 0.1))
-    @test(isapprox(marginal_probability(net, [forecast=>int32(1)], [success=>int32(1)]), 0.3))
-    @test(isapprox(marginal_probability(net, [forecast=>int32(2)], [success=>int32(1)]), 0.6))
+    @test(isapprox(marginal_probability(net, Dict(forecast=>Int32(0)), Dict(success=>Int32(0))), 0.4))
+    @test(isapprox(marginal_probability(net, Dict(forecast=>Int32(1)), Dict(success=>Int32(0))), 0.4))
+    @test(isapprox(marginal_probability(net, Dict(forecast=>Int32(2)), Dict(success=>Int32(0))), 0.2))
+    @test(isapprox(marginal_probability(net, Dict(forecast=>Int32(0)), Dict(success=>Int32(1))), 0.1))
+    @test(isapprox(marginal_probability(net, Dict(forecast=>Int32(1)), Dict(success=>Int32(1))), 0.3))
+    @test(isapprox(marginal_probability(net, Dict(forecast=>Int32(2)), Dict(success=>Int32(1))), 0.6))
 
-    @test(isapprox(probability(net, [success=>int32(0), forecast=>int32(0)]), 0.2*0.4))
-    @test(isapprox(probability(net, [success=>int32(0), forecast=>int32(1)]), 0.2*0.4))
-    @test(isapprox(probability(net, [success=>int32(0), forecast=>int32(2)]), 0.2*0.2))
-    @test(isapprox(probability(net, [success=>int32(1), forecast=>int32(0)]), 0.8*0.1))
-    @test(isapprox(probability(net, [success=>int32(1), forecast=>int32(1)]), 0.8*0.3))
-    @test(isapprox(probability(net, [success=>int32(1), forecast=>int32(2)]), 0.8*0.6))
+    @test(isapprox(probability(net, Dict(success=>Int32(0), forecast=>Int32(0))), 0.2*0.4))
+    @test(isapprox(probability(net, Dict(success=>Int32(0), forecast=>Int32(1))), 0.2*0.4))
+    @test(isapprox(probability(net, Dict(success=>Int32(0), forecast=>Int32(2))), 0.2*0.2))
+    @test(isapprox(probability(net, Dict(success=>Int32(1), forecast=>Int32(0))), 0.8*0.1))
+    @test(isapprox(probability(net, Dict(success=>Int32(1), forecast=>Int32(1))), 0.8*0.3))
+    @test(isapprox(probability(net, Dict(success=>Int32(1), forecast=>Int32(2))), 0.8*0.6))
 
-    @test(isapprox(probability(net, [success=>int32(0)]), 0.2))
-    @test(isapprox(probability(net, [success=>int32(1)]), 0.8))
+    @test(isapprox(probability(net, Dict(success=>Int32(0))), 0.2))
+    @test(isapprox(probability(net, Dict(success=>Int32(1))), 0.8))
 
-    @test(isapprox(probability(net, [forecast=>int32(0)]), 0.16))
-    @test(isapprox(probability(net, [forecast=>int32(1)]), 0.32))
-    @test(isapprox(probability(net, [forecast=>int32(2)]), 0.52))
+    @test(isapprox(probability(net, Dict(forecast=>Int32(0))), 0.16))
+    @test(isapprox(probability(net, Dict(forecast=>Int32(1))), 0.32))
+    @test(isapprox(probability(net, Dict(forecast=>Int32(2))), 0.52))
 
-    @test(isapprox(logprob(net, [success=>int32(0), forecast=>int32(0)]), log(0.2*0.4)))
-    @test(isapprox(logprob(net, [success=>int32(0), forecast=>int32(1)]), log(0.2*0.4)))
-    @test(isapprox(logprob(net, [success=>int32(0), forecast=>int32(2)]), log(0.2*0.2)))
-    @test(isapprox(logprob(net, [success=>int32(1), forecast=>int32(0)]), log(0.8*0.1)))
-    @test(isapprox(logprob(net, [success=>int32(1), forecast=>int32(1)]), log(0.8*0.3)))
-    @test(isapprox(logprob(net, [success=>int32(1), forecast=>int32(2)]), log(0.8*0.6)))
+    @test(isapprox(logprob(net, Dict(success=>Int32(0), forecast=>Int32(0))), log(0.2*0.4)))
+    @test(isapprox(logprob(net, Dict(success=>Int32(0), forecast=>Int32(1))), log(0.2*0.4)))
+    @test(isapprox(logprob(net, Dict(success=>Int32(0), forecast=>Int32(2))), log(0.2*0.2)))
+    @test(isapprox(logprob(net, Dict(success=>Int32(1), forecast=>Int32(0))), log(0.8*0.1)))
+    @test(isapprox(logprob(net, Dict(success=>Int32(1), forecast=>Int32(1))), log(0.8*0.3)))
+    @test(isapprox(logprob(net, Dict(success=>Int32(1), forecast=>Int32(2))), log(0.8*0.6)))
 
-    @test(isapprox(logprob(net, [success=>int32(0)]), log(0.2)))
-    @test(isapprox(logprob(net, [success=>int32(1)]), log(0.8)))
+    @test(isapprox(logprob(net, Dict(success=>Int32(0))), log(0.2)))
+    @test(isapprox(logprob(net, Dict(success=>Int32(1))), log(0.8)))
 
-    @test(isapprox(logprob(net, [forecast=>int32(0)]), log(0.16)))
-    @test(isapprox(logprob(net, [forecast=>int32(1)]), log(0.32)))
-    @test(isapprox(logprob(net, [forecast=>int32(2)]), log(0.52)))
-end
+    @test(isapprox(logprob(net, Dict(forecast=>Int32(0))), log(0.16)))
+    @test(isapprox(logprob(net, Dict(forecast=>Int32(1))), log(0.32)))
+    @test(isapprox(logprob(net, Dict(forecast=>Int32(2))), log(0.52)))
+# end

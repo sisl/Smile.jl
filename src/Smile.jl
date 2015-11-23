@@ -16,11 +16,11 @@ module Smile
 curpath = dirname(@__FILE__() )
 pathtoadd = curpath[1:end-3]*"deps/downloads/"
 
-if isempty(find_library(["libsmilejl"], [pathtoadd]))
+if isempty(Libdl.find_library(collect(["libsmilejl"]), collect([pathtoadd])))
 	warn("Could not communicate with libsmilejl. Make sure it exists and that it is on the path.")
 else
 
-	global const LIB_SMILE = find_library(["libsmilejl"], [pathtoadd])
+	global const LIB_SMILE = Libdl.find_library(collect(["libsmilejl"]), collect([pathtoadd]))
 
 	import Base: getindex, setindex!, print
 

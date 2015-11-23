@@ -4,12 +4,12 @@ export
 		get_size_of_dimension
 
 function get_at{T <: Integer}( dmat::DMatrix, coord::Array{T,1} )
-	retval = ccall( (:dmatrix_GetAtCoord, LIB_SMILE), Float64, (Ptr{Void},Ptr{Int32},Uint32), dmat.ptr, int32(coord), length(coord) )
+	retval = ccall( (:dmatrix_GetAtCoord, LIB_SMILE), Float64, (Ptr{Void},Ptr{Int32},UInt32), dmat.ptr, Int32(coord), length(coord) )
 	return retval
 end
 
 
-# the order of the probabilities is given by considering the state of 
+# the order of the probabilities is given by considering the state of
 # the first parent as "most significant", then the second parent, then
 # the third (and so on), and finally considering the coordinate of the
 # node itself as the least significant one.
@@ -26,9 +26,9 @@ end
 #     ...
 #                  11       ->       [A2 B3 C2]
 
-Base.getindex(dmat::DMatrix, index::Integer) = 
+Base.getindex(dmat::DMatrix, index::Integer) =
     ccall( (:dmatrix_GetAtInd, LIB_SMILE), Float64, (Ptr{Void},Int32), dmat.ptr, index )
-Base.setindex!(dmat::DMatrix, value::Real, ind::Integer) = 
+Base.setindex!(dmat::DMatrix, value::Real, ind::Integer) =
     ccall( (:dmatrix_SetAtInd, LIB_SMILE), Void, (Ptr{Void},Int32,Float64), dmat.ptr, ind, value )
 
 get_number_of_dimensions( dmat::DMatrix ) =

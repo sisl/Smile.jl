@@ -26,7 +26,7 @@ function learn!{S<:DSL_LearnParams}( net::Network, mat::Matrix{Int}, params::S )
 	learn!( net, dset, params )
 end
 
-function matrix_to_dataset{R <: Real, S<:String}( mat::Matrix{R}, names::Vector{S}=alphanumeric_names(size(mat,2)) )
+function matrix_to_dataset{R <: Real, S<:AbstractString}( mat::Matrix{R}, names::Vector{S}=alphanumeric_names(size(mat,2)) )
 	# converts a Matrix{Int} to a Dataset by writing it to a tempfile and loading it back in
 	# each column in mat is one variable's data
 
@@ -40,10 +40,10 @@ function matrix_to_dataset{R <: Real, S<:String}( mat::Matrix{R}, names::Vector{
 	dset
 end
 
-function writetable{R <: Real, S<:String}(filename::String, mat::Matrix{R}, names::Vector{S}; separator::Char='\t')
+function writetable{R <: Real, S<:AbstractString}(filename::AbstractString, mat::Matrix{R}, names::Vector{S}; separator::Char='\t')
 	n,m = size(mat)
 	f = open(filename, "w")
-	
+
 	for name in names[1:end-1]
 		@printf(f, "%s%c", name, separator)
 	end
@@ -82,7 +82,7 @@ function alphanumeric_names(n::Int)
 	# generate the first n lexographic names
 	# a,b,c,...,z,aa,ab,...
 	@assert(n > 0)
-	names = Array(String, n)
+	names = Array(AbstractString, n)
 	names[1] = "a"
 	for i = 2 : n
 		names[i] = increment_alphanumeric_string(names[i-1])

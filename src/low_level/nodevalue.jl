@@ -14,7 +14,7 @@ end
 get_size( nodeval::NodeValue ) = 
     ccall( (:nodevalue_GetSize, LIB_SMILE), Int32, (Ptr{Void},), nodeval.ptr )
 
-get_evidence_int( nodeval::NodeValue, val::FloatingPoint ) =
+get_evidence_int( nodeval::NodeValue, val::AbstractFloat ) =
     ccall( (:nodevalue_GetEvidence_Int, LIB_SMILE), Int32, (Ptr{Void},), nodeval.ptr )
 function get_evidence_double( nodeval::NodeValue )
     retval = 0.0::Cdouble
@@ -24,7 +24,7 @@ function get_evidence_double( nodeval::NodeValue )
     end
     retval
 end
-set_evidence( nodeval::NodeValue, val::FloatingPoint ) =
+set_evidence( nodeval::NodeValue, val::AbstractFloat ) =
     ccall( (:nodevalue_SetEvidence_Double, LIB_SMILE), Int32, (Ptr{Void},Cdouble), nodeval.ptr, val )
 set_evidence( nodeval::NodeValue, val::Integer ) =
     ccall( (:nodevalue_SetEvidence_Int, LIB_SMILE), Int32, (Ptr{Void},Cint), nodeval.ptr, val )
