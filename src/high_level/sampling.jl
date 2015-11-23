@@ -140,7 +140,7 @@ function Base.rand!{I<:Integer}(net::Network, assignment::Dict{Cint, Cint};
             go_to_current_position(thecoordinates)
 
             p = Array(Float64, nstates)
-            for i = 1 : nstates
+            for i in 1 : nstates
                 p[i] = unchecked_value(thecoordinates)
                 if i != nstates
                     next(thecoordinates)
