@@ -26,7 +26,7 @@ end
 function get_name( node::Node )
 	retval = Array(UInt8, 128)
 	ccall( (:node_GetName, LIB_SMILE), Void, (Ptr{Void}, Ptr{UInt8}), node.ptr, retval )
-	bytestring(convert(Ptr{UInt8}, retval))
+	bytestring(retval)
 end
 
 function handle( node::Node )
@@ -40,7 +40,7 @@ function network( node::Node )
 end
 
 function set_name( node::Node, name::AbstractString )
-	
+
 	ccall( (:node_SetName, LIB_SMILE), Void, (Ptr{Void}, Ptr{UInt8}), node.ptr, bytestring(name) )
 end
 

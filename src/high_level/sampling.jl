@@ -42,7 +42,7 @@ function draw_from_p_vec(p::Vector{Float64})
     return i-1
 end
 
-function get_marginal_probability_vec(net::Network, nodeid::Cint, evidence::Dict{Cint, Cint}=Dict{Cint=>Cint}())
+function get_marginal_probability_vec(net::Network, nodeid::Cint, evidence::Dict{Cint, Cint}=Dict{Cint,Cint}())
 
     #=
     Returns the probabilty vector [P_nodeid=0, P_nodeid=1, ...]::Vector{Float64}
@@ -187,7 +187,7 @@ function probability{I<:Integer}(net, assignment::Dict{Cint, Cint};
 
     retval
 end
-function probabilities{I<:Integer}(net, assignment::Dict{Cint, Cint}, evidence::Dict{Cint, Cint}=Dict{Cint=>Cint}();
+function probabilities{I<:Integer}(net, assignment::Dict{Cint, Cint}, evidence::Dict{Cint, Cint}=Dict{Cint,Cint}();
     ordering::Vector{I} = to_native_int_array(partial_ordering(net)::IntArray),
     )
     # P(assignment)
@@ -251,7 +251,7 @@ function logprob{I<:Integer}(net, assignment::Dict{Cint, Cint};
 end
 
 
-function marginal_probability(net, target::Dict{Cint, Cint}, evidence::Dict{Cint, Cint}=Dict{Cint=>Cint}())
+function marginal_probability(net, target::Dict{Cint, Cint}, evidence::Dict{Cint, Cint}=Dict{Cint,Cint}())
     # P(target ∣ evidence)
 
     retval = 1.0
@@ -272,7 +272,7 @@ function marginal_probability(net, target::Dict{Cint, Cint}, evidence::Dict{Cint
 
     retval
 end
-function marginal_logprob(net, target::Dict{Cint, Cint}, evidence::Dict{Cint, Cint}=Dict{Cint=>Cint}())
+function marginal_logprob(net, target::Dict{Cint, Cint}, evidence::Dict{Cint, Cint}=Dict{Cint,Cint}())
     # P(target ∣ evidence)
 
     retval = 0.0
