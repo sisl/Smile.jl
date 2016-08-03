@@ -13,7 +13,7 @@ module Smile
 ##
 ##############################################################################
 
-pathtoadd = Pkg.dir("Smile", "deps", "downloads")
+pathtoadd = joinpath(dirname(@__FILE__), "..", "deps", "downloads")
 
 if isempty(Libdl.find_library(collect(["libsmilejl"]), collect([pathtoadd])))
 	warn("Could not communicate with libsmilejl. Make sure it exists and that it is on the path.")

@@ -10,7 +10,7 @@
 # @BinDeps.install [:libsmilejl => :libsmilejl]
 
 
-downloads = Pkg.dir("Smile", "deps", "downloads")
+downloads = joinpath(dirname(@__FILE__), "downloads")
 println(downloads)
 
 if !isdir(downloads)
