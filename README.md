@@ -10,7 +10,9 @@ A Julia wrapper for the **[Smile C++ Structural Modeling, Inference, and Learnin
 [![Coverage Status](https://coveralls.io/repos/sisl/Smile.jl/badge.svg)](https://coveralls.io/r/sisl/Smile.jl)
 [![Documentation Status](https://readthedocs.org/projects/smile/badge/?version=latest)](https://readthedocs.org/projects/smile/?badge=latest)
 
+# End of Life
 
+Smile.jl is no longer needed as of Julia 0.5. Julians can use the [Cxx](https://github.com/Keno/Cxx.jl) library to call the Smile C++ .so files directly. There is also the [BayesNets](https://github.com/sisl/BayesNets.jl) package which provides native Julia implementations.
 
 ## Documentation
 
